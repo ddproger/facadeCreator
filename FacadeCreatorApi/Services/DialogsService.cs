@@ -41,5 +41,9 @@ namespace FacadeCreatorApi.Services
 
             return image;
         }
+        public static bool SaveFacadesToDisk(ICollection<Image> images)
+        {
+            return false;
+        }
     }
 }
