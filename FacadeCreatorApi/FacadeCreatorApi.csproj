@@ -42,10 +42,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="models\ApplyingToKD.cs" />
     <Compile Include="models\BkgImage.cs" />
     <Compile Include="models\Facade.cs" />
     <Compile Include="models\Figure.cs" />
     <Compile Include="models\FigureOnBoard.cs" />
+    <Compile Include="Services\KdSdkApi.cs" />
     <Compile Include="models\Scenes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ContextMenuBuilder.cs" />
