@@ -20,7 +20,7 @@ namespace FacadeCreatorApi
         float scaleStep=0.1f;
         bool cntrEnabled = false;
         bool isMouseDown = false;
-        bool canMovedFacadeMode = true;
+        bool canMovedFacadeMode = false;
 
         FiguresCollection bkgImages;
         FiguresCollection facades;
@@ -41,6 +41,7 @@ namespace FacadeCreatorApi
         {
             LinkedList<Services.MenuItem> menuItems = new LinkedList<Services.MenuItem>();
             menuItems.AddLast(new MenuItemImpl("mnuAddmage", "Добавить изображение", null, mnuAddImage_Click));
+            menuItems.AddLast(new MenuItemImpl("mnuEnableEditPosition", "Редактировать положение фасадов", null, mnuEnableEditPosition_Click));
             menuItems.AddLast(new MenuItemImpl("mnuPaste", "Вставить", null, null));
             menuItems.AddLast(new MenuItemImpl("mnuComplete", "Обрезать и применить", null, mnuComplete_Click));
 
@@ -113,6 +114,21 @@ namespace FacadeCreatorApi
             menuBuilder.addToExistingStrip("mnuPosition", "На задний план", mnuToBack_Click);
 
             return menuBuilder.getContext();
+        }
+
+        private void mnuEnableEditPosition_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem menu = ((ToolStripMenuItem)sender);
+            if(menu.CheckState== CheckState.Unchecked)
+            {
+                canMovedFacadeMode = true;
+                menu.CheckState = CheckState.Checked;
+            }
+            else
+            {
+                canMovedFacadeMode = false;
+                menu.CheckState = CheckState.Unchecked;
+            }
         }
 
         private void mnuLower_Click(object sender, EventArgs e)
@@ -393,8 +409,6 @@ namespace FacadeCreatorApi
                     offsetX += (int)((coordinate.X - clickPoint.X)*scale);
                     offsetY += (int)((coordinate.Y - clickPoint.Y)*scale);
                     clickPoint = transformCoordinate(e.X,e.Y);
-
-
                     //Console.WriteLine("offsetX After refreshing="+offsetX+ " offsetY After refreshing=" + offsetY);
 
                     UpdateGraphics();
