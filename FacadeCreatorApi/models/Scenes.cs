@@ -35,6 +35,7 @@ namespace FacadeCreatorApi
         ContextMenuStrip mnuFigure;
         ContextMenuStrip mnuCanvas;
         private Image pastingImage;
+        private Point absoluteClickPoint;
 
         private ContextMenuStrip createMenuCanvas()
         {
@@ -379,9 +380,23 @@ namespace FacadeCreatorApi
                 canvas.ContextMenuStrip = mnuCanvas;
                 if (isMouseDown)
                 {
-                    Point coordinate = transformCoordinate((int)(e.X + offsetX * scale), (int)(e.Y + offsetY * scale));
-                    offsetX = coordinate.X - clickPoint.X;
-                    offsetY = coordinate.Y - clickPoint.Y;
+
+
+
+                    Point coordinate = transformCoordinate(e.X,e.Y);
+
+                    //Console.WriteLine("e.x=" + e.X + " offsetX=" + offsetX);
+                    //Console.WriteLine("e.y=" + e.Y + " offsetY=" + offsetY);
+                    //Console.WriteLine("scale=" + scale + " transformPoint=" + coordinate);
+                    //Console.WriteLine("clickpointX=" + clickPoint.X + " clickpointY=" + clickPoint.Y);
+
+                    offsetX += (int)((coordinate.X - clickPoint.X)*scale);
+                    offsetY += (int)((coordinate.Y - clickPoint.Y)*scale);
+                    clickPoint = transformCoordinate(e.X,e.Y);
+
+
+                    //Console.WriteLine("offsetX After refreshing="+offsetX+ " offsetY After refreshing=" + offsetY);
+
                     UpdateGraphics();
                 }
             }
@@ -395,6 +410,7 @@ namespace FacadeCreatorApi
             }
             if (e.Button != MouseButtons.Left) return;
             clickPoint = transformCoordinate(e.X, e.Y);
+            absoluteClickPoint = new Point(e.X, e.Y);
             if (pastingImage != null)
             {
                 addFigure(new BkgImage(pastingImage), clickPoint.X, clickPoint.Y);
