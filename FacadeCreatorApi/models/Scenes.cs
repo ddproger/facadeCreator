@@ -316,10 +316,10 @@ namespace FacadeCreatorApi
         private void keyUp(object sender, KeyEventArgs e)
         {
             cntrEnabled = false;
-            if(e.KeyCode== Keys.C)
-            {
-                copySelectedFigure();
-               
+            
+            if (e.KeyCode== Keys.C)
+            {                
+                copySelectedFigure();               
             }else if (e.KeyCode == Keys.V)
             {
                 pasteBuferedFigure(bufferedFigure.x, bufferedFigure.y);
@@ -333,6 +333,53 @@ namespace FacadeCreatorApi
 
         private void keyDown(object sender, KeyEventArgs e)
         {
+            switch (e.KeyCode)
+            {
+                case Keys.Left:
+                    if (selectedFigure != null)
+                    {
+                        selectedFigure.x--;                        
+                    }
+                    else
+                    {
+                        offsetX--;
+                    }
+                    UpdateGraphics();
+                    break;
+                case Keys.Right:
+                    if (selectedFigure != null)
+                    {
+                        selectedFigure.x++;
+                    }
+                    else
+                    {
+                        offsetX++;
+                    }
+                    UpdateGraphics();
+                    break;
+                case Keys.Up:
+                    if (selectedFigure != null)
+                    {
+                        selectedFigure.y--;
+                    }
+                    else
+                    {
+                        offsetY--;
+                    }
+                    UpdateGraphics();
+                    break;
+                case Keys.Down:
+                    if (selectedFigure != null)
+                    {
+                        selectedFigure.y++;
+                    }
+                    else
+                    {
+                        offsetY++;
+                    }
+                    UpdateGraphics();
+                    break;
+            }
             if (e.Control)
             {
                 //if(selectedFigure!=null&&selectedFigure.figure.getAction()== models.Action.SIZE_NWSE_WR)
