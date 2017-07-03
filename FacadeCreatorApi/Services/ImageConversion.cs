@@ -16,18 +16,14 @@ namespace FacadeCreatorApi.Services
             
             Image img;
             foreach (FigureOnBoard item in collection)
-            {
-                if (item.figure is Facade)
-                {
+            { 
                     img = new Bitmap(item.figure.width, item.figure.height);
                     using(Graphics gp = Graphics.FromImage(img))
                     {
                         gp.DrawImage(image, new Rectangle(0, 0, img.Width, img.Height), new Rectangle(item.x, item.y, img.Width, img.Height),GraphicsUnit.Pixel);
                         img.Save("c:\\images\\image" + item.figure.ToString() + ".jpg", ImageFormat.Jpeg);
                     }
-                    //img = new Bitmap(image.Clone(new Rectangle(item.x, item.y, item.figure.width, item.figure.height), image.PixelFormat));
-                    
-                }                
+                    //img = new Bitmap(image.Clone(new Rectangle(item.x, item.y, item.figure.width, item.figure.height), image.PixelFormat           
             } 
         }
     }

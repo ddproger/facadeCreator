@@ -20,6 +20,7 @@ namespace FacadeCreatorApi
         float scaleStep=0.1f;
         bool cntrEnabled = false;
         bool isMouseDown = false;
+        bool canMovedFacadeMode = true;
 
         FiguresCollection bkgImages;
         FiguresCollection facades;
@@ -60,7 +61,7 @@ namespace FacadeCreatorApi
         private void mnuComplete_Click(object sender, EventArgs e)
         {
            Bitmap image = generateFullGrapics();
-           ImageConversion.generateFacades(image, bkgImages);
+           ImageConversion.generateFacades(image, facades);
         }
 
         private Bitmap generateFullGrapics()
@@ -71,7 +72,7 @@ namespace FacadeCreatorApi
             graphics.FillRectangle(Brushes.White, 0, 0, maxSize.X, maxSize.Y);
             foreach (FigureOnBoard item in bkgImages)
             {
-                if(item.figure is BkgImage)item.figure.draw(graphics, item.x, item.y);
+                item.figure.draw(graphics, item.x, item.y);
             }
             return newImage;
         }
@@ -80,6 +81,13 @@ namespace FacadeCreatorApi
         {
             int maxX=0, maxY=0, curX, curY;
             foreach (FigureOnBoard item in bkgImages)
+            {
+                curX = item.x + item.figure.width;
+                curY = item.y + item.figure.height;
+                if (curX > maxX) maxX = curX;
+                else if (curY > maxY) maxY = curY;
+            }
+            foreach (FigureOnBoard item in facades)
             {
                 curX = item.x + item.figure.width;
                 curY = item.y + item.figure.height;
@@ -146,7 +154,7 @@ namespace FacadeCreatorApi
         }
 
         private int getIndex(FigureOnBoard selectedFigure)
-        {
+        {            
             return bkgImages.getIndex(selectedFigure);
         }
 
@@ -189,17 +197,23 @@ namespace FacadeCreatorApi
 
         private void deleteFigure(FigureOnBoard selectedFigure)
         {
-            bkgImages.remove(selectedFigure);
+            if (selectedFigure.figure is BkgImage)
+            {
+                bkgImages.remove(selectedFigure);
+            }else
+            {
+                facades.remove(selectedFigure);
+            }
         }
         public Scenes(Control canvas)
         {
             this.canvas = canvas;
 
             bkgImages = new FiguresCollectionImpl();
+            facades = new FiguresCollectionImpl();
 
             Image newImage = Image.FromFile("C:\\Users\\gerasymiuk\\Documents\\Visual Studio 2017\\Projects\\FacadeCreator\\FacadeCreatorApi\\bin\\Debug\\1.png");
             addFigure(new BkgImage(newImage), 0, 0);
-
             addFigure(new Facade(1,100, 150), 140, 5);
             addFigure(new Facade(2,100,150),140,5);
             addFigure(new Facade(3,100, 150), 340, 5);      
@@ -228,7 +242,10 @@ namespace FacadeCreatorApi
 
         private void addFigure(Figure figure, int x, int y)
         {
-            bkgImages.add(new FigureOnBoard(figure, x, y));
+            if(figure is BkgImage)
+                bkgImages.add(new FigureOnBoard(figure, x, y));
+            else
+                facades.add(new FigureOnBoard(figure, x, y));
             UpdateGraphics();
         }
 
@@ -243,6 +260,10 @@ namespace FacadeCreatorApi
             graphics.TranslateTransform(offsetX, offsetY);
             graphics.ScaleTransform(scale, scale);
             foreach (FigureOnBoard item in bkgImages)
+            {
+                item.figure.draw(graphics, item.x, item.y);
+            }
+            foreach (FigureOnBoard item in facades)
             {
                 item.figure.draw(graphics, item.x, item.y);
             }
@@ -389,6 +410,22 @@ namespace FacadeCreatorApi
             }
 
             int x, y;
+            if (canMovedFacadeMode)
+            {
+                foreach (FigureOnBoard item in facades.getReverseCollection())
+                {
+                    x = clickPoint.X - item.x;
+                    y = clickPoint.Y - item.y;
+                    if (item.figure.isPointInFigure(x, y))
+                    {
+                        selectFigure(item);
+                        Cursor.Current = item.figure.getCursor(x, y, cntrEnabled);
+                        clickPoint.X -= selectedFigure.x;
+                        clickPoint.Y -= selectedFigure.y;
+                        return;
+                    }
+                }
+            }
             foreach (FigureOnBoard item in bkgImages.getReverseCollection())
             {
                 x = clickPoint.X - item.x;
