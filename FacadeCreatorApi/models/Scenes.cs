@@ -21,7 +21,9 @@ namespace FacadeCreatorApi
         bool cntrEnabled = false;
         bool isMouseDown = false;
 
-        FiguresCollection masFigures;
+        FiguresCollection bkgImages;
+        FiguresCollection facades;
+
         FigureOnBoard selectedFigure;
         FigureOnBoard bufferedFigure;
         private Point clickPoint=new Point();
@@ -58,7 +60,7 @@ namespace FacadeCreatorApi
         private void mnuComplete_Click(object sender, EventArgs e)
         {
            Bitmap image = generateFullGrapics();
-           ImageConversion.generateFacades(image, masFigures);
+           ImageConversion.generateFacades(image, bkgImages);
         }
 
         private Bitmap generateFullGrapics()
@@ -67,7 +69,7 @@ namespace FacadeCreatorApi
             Bitmap newImage = new Bitmap(maxSize.X, maxSize.Y);
             Graphics graphics = Graphics.FromImage(newImage);
             graphics.FillRectangle(Brushes.White, 0, 0, maxSize.X, maxSize.Y);
-            foreach (FigureOnBoard item in masFigures)
+            foreach (FigureOnBoard item in bkgImages)
             {
                 if(item.figure is BkgImage)item.figure.draw(graphics, item.x, item.y);
             }
@@ -77,7 +79,7 @@ namespace FacadeCreatorApi
         private Point getBordersOfCanvas()
         {
             int maxX=0, maxY=0, curX, curY;
-            foreach (FigureOnBoard item in masFigures)
+            foreach (FigureOnBoard item in bkgImages)
             {
                 curX = item.x + item.figure.width;
                 curY = item.y + item.figure.height;
@@ -115,14 +117,14 @@ namespace FacadeCreatorApi
 
         private void shufle(int index, int v)
         {
-            masFigures.shuffle(index, v);
+            bkgImages.shuffle(index, v);
             UpdateGraphics();
         }
 
         private void mnuUp_Click(object sender, EventArgs e)
         {
             int index = getIndex(selectedFigure);
-            if (index != -1&&index!=masFigures.getCount()-1)
+            if (index != -1&&index!=bkgImages.getCount()-1)
             {
                 move(index, index+1);
             }
@@ -139,13 +141,13 @@ namespace FacadeCreatorApi
 
         private void move(int from, int to)
         {
-            masFigures.move(from, to);
+            bkgImages.move(from, to);
             UpdateGraphics();
         }
 
         private int getIndex(FigureOnBoard selectedFigure)
         {
-            return masFigures.getIndex(selectedFigure);
+            return bkgImages.getIndex(selectedFigure);
         }
 
         private void mnuToFrontClick(object sender, EventArgs e)
@@ -153,7 +155,7 @@ namespace FacadeCreatorApi
             int index = getIndex(selectedFigure);
             if (index != -1)
             {
-                move(index, masFigures.getCount()-1);
+                move(index, bkgImages.getCount()-1);
             }
         }
 
@@ -187,13 +189,13 @@ namespace FacadeCreatorApi
 
         private void deleteFigure(FigureOnBoard selectedFigure)
         {
-            masFigures.remove(selectedFigure);
+            bkgImages.remove(selectedFigure);
         }
         public Scenes(Control canvas)
         {
             this.canvas = canvas;
 
-            masFigures = new FiguresCollectionImpl();
+            bkgImages = new FiguresCollectionImpl();
 
             Image newImage = Image.FromFile("C:\\Users\\gerasymiuk\\Documents\\Visual Studio 2017\\Projects\\FacadeCreator\\FacadeCreatorApi\\bin\\Debug\\1.png");
             addFigure(new BkgImage(newImage), 0, 0);
@@ -226,7 +228,7 @@ namespace FacadeCreatorApi
 
         private void addFigure(Figure figure, int x, int y)
         {
-            masFigures.add(new FigureOnBoard(figure, x, y));
+            bkgImages.add(new FigureOnBoard(figure, x, y));
             UpdateGraphics();
         }
 
@@ -240,7 +242,7 @@ namespace FacadeCreatorApi
         {
             graphics.TranslateTransform(offsetX, offsetY);
             graphics.ScaleTransform(scale, scale);
-            foreach (FigureOnBoard item in masFigures)
+            foreach (FigureOnBoard item in bkgImages)
             {
                 item.figure.draw(graphics, item.x, item.y);
             }
@@ -387,7 +389,7 @@ namespace FacadeCreatorApi
             }
 
             int x, y;
-            foreach (FigureOnBoard item in masFigures.getReverseCollection())
+            foreach (FigureOnBoard item in bkgImages.getReverseCollection())
             {
                 x = clickPoint.X - item.x;
                 y = clickPoint.Y - item.y;
