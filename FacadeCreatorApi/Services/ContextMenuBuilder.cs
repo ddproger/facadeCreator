@@ -21,12 +21,11 @@ namespace FacadeCreatorApi.Services
 
             }
         }
-        public void addToExistingStrip(string existMenuName, string newMenuName, EventHandler eventListener)
+        public void addToExistingStrip(string existMenuName, MenuItem item)
         {
             ToolStripMenuItem existingMenu = (ToolStripMenuItem)mnu.Items.Find(existMenuName, true).First();
             if (existingMenu == null) return;
-            ToolStripMenuItem newMenu = new ToolStripMenuItem(newMenuName);
-            newMenu.Click += eventListener;
+            ToolStripMenuItem newMenu = new ToolStripMenuItem(item.getTitle(), item.getImage(), item.getListener(), item.getName()); ;
             existingMenu.DropDownItems.Add(newMenu);
         }
         public ContextMenuStrip getContext()
