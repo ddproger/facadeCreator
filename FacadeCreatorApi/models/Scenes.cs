@@ -28,6 +28,7 @@ namespace FacadeCreatorApi
         FigureOnBoard selectedFigure;
         FigureOnBoard bufferedFigure;
         private Point clickPoint=new Point();
+        private Point mousePosition = new Point();
         private const float MAX_ZOOM = 3;
         private const int SHIFT_STEP = 5;
         private const int ARRAY_SIZE_STEP = 10;
@@ -62,32 +63,37 @@ namespace FacadeCreatorApi
 
         private void mnuComplete_Click(object sender, EventArgs e)
         {
-           Bitmap image = generateFullGrapics();
-           ImageConversion.generateFacades(image, facades);
+            Rectangle areaSize = getBordersOfCanvas();
+            Bitmap image = generateFullGrapics(areaSize);
+            ImageConversion.generateFacades(areaSize, image, facades);
         }
 
-        private Bitmap generateFullGrapics()
+        private Bitmap generateFullGrapics(Rectangle areaSize)
         {
-            Point maxSize = getBordersOfCanvas();
-            Bitmap newImage = new Bitmap(maxSize.X, maxSize.Y);
+
+            Bitmap newImage = new Bitmap(areaSize.Width, areaSize.Height);
             Graphics graphics = Graphics.FromImage(newImage);
-            graphics.FillRectangle(Brushes.White, 0, 0, maxSize.X, maxSize.Y);
+            //graphics.TranslateTransform(areaSize.X, areaSize.Y);
+            graphics.FillRectangle(Brushes.White, 0, 0, areaSize.Width-areaSize.X, areaSize.Height - areaSize.Y);
             foreach (FigureOnBoard item in bkgImages)
             {
-                item.figure.draw(graphics, item.x, item.y);
+                item.figure.draw(graphics, item.x-areaSize.X, item.y-areaSize.Y);
             }
+            //newImage.Save("c:\\images\\fullImage.jpg");
             return newImage;
         }
 
-        private Point getBordersOfCanvas()
+        private Rectangle getBordersOfCanvas()
         {
-            int maxX=0, maxY=0, curX, curY;
+            int minX=0,minY=0, maxX=0, maxY=0, curX, curY;
             foreach (FigureOnBoard item in bkgImages)
             {
                 curX = item.x + item.figure.width;
                 curY = item.y + item.figure.height;
                 if (curX > maxX) maxX = curX;
-                else if (curY > maxY) maxY = curY;
+                if (curY > maxY) maxY = curY;
+                if (item.x < minX) minX = item.x;
+                if (item.y < minY) minY = item.y;
             }
             foreach (FigureOnBoard item in facades)
             {
@@ -95,8 +101,13 @@ namespace FacadeCreatorApi
                 curY = item.y + item.figure.height;
                 if (curX > maxX) maxX = curX;
                 else if (curY > maxY) maxY = curY;
+                if (item.x < minX) minX = item.x;
+                else if (item.y < minY) minY = item.y;
             }
-            return new Point(maxX, maxY);
+            maxX -= minX;
+            maxY -= minY;
+
+            return new Rectangle(minX,minY,maxX, maxY);
         }
 
         private ContextMenuStrip createMenuFigure()
@@ -276,9 +287,14 @@ namespace FacadeCreatorApi
         {
             graphics.TranslateTransform(offsetX, offsetY);
             graphics.ScaleTransform(scale, scale);
+            
             foreach (FigureOnBoard item in bkgImages)
             {
                 item.figure.draw(graphics, item.x, item.y);
+            }
+            if (selectedFigure != null)
+            {
+                selectedFigure.figure.draw(graphics, selectedFigure.x, selectedFigure.y);
             }
             foreach (FigureOnBoard item in facades)
             {
@@ -292,6 +308,7 @@ namespace FacadeCreatorApi
             {
                 if (e.Delta > 0) ZoomIn();
                 else ZoomOut();
+               
                 UpdateGraphics();
             }
            
@@ -300,19 +317,25 @@ namespace FacadeCreatorApi
         {
             if (scale <= MAX_ZOOM)
             {
+                //offsetX -= (int)(mousePosition.X * scaleStep);
+                //offsetY -= (int)(mousePosition.Y * scaleStep);
                 scale += scaleStep;
+                //offsetX -= (int)(((mousePosition.X + offsetX) * scaleStep) );
+                //offsetY -= (int)(((mousePosition.Y + offsetY) * scaleStep) );
             }
         }
         private void ZoomOut()
         {
             if (scale > scaleStep)
             {
-                scale -= scaleStep;                
+               // offsetX += (int)(mousePosition.X * scaleStep);
+                //offsetY += (int)(mousePosition.Y * scaleStep);
+                scale -= scaleStep;
+               // offsetX += (int)(((mousePosition.X + offsetX) * scaleStep) );
+                //offsetY += (int)(((mousePosition.Y + offsetY) * scaleStep) );
+
             }
         }
-
-        
-
         private void keyUp(object sender, KeyEventArgs e)
         {
             cntrEnabled = false;
@@ -460,6 +483,10 @@ namespace FacadeCreatorApi
 
                     UpdateGraphics();
                 }
+            }
+            if (cntrEnabled)
+            {
+                mousePosition = new Point(e.X, e.Y);
             }
         }
 
