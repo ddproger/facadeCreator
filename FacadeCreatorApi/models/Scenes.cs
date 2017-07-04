@@ -237,9 +237,6 @@ namespace FacadeCreatorApi
                 canvas.ContextMenuStrip = mnuCanvas;
                 if (isMouseDown)
                 {
-
-
-
                     Point coordinate = transformCoordinate(e.X, e.Y);
 
                     //Console.WriteLine("e.x=" + e.X + " offsetX=" + offsetX);
@@ -255,10 +252,9 @@ namespace FacadeCreatorApi
                     UpdateGraphics();
                 }
             }
-            if (cntrEnabled)
-            {
+            
                 mousePosition = new Point(e.X, e.Y);
-            }
+            
         }
 
         private void mouseDown(object sender, MouseEventArgs e)
@@ -462,11 +458,19 @@ namespace FacadeCreatorApi
         {
             if (scale <= MAX_ZOOM)
             {
-                //offsetX -= (int)(mousePosition.X * scaleStep);
-                //offsetY -= (int)(mousePosition.Y * scaleStep);
                 scale += SCALE_STEP;
                 //offsetX -= (int)(((mousePosition.X + offsetX) * scaleStep) );
                 //offsetY -= (int)(((mousePosition.Y + offsetY) * scaleStep) );
+                float x = mousePosition.X * SCALE_STEP;
+                x /= scale;
+                
+                offsetX -= (int)(((mousePosition.X * SCALE_STEP) ) + 0.5);
+                offsetY -= (int)(((mousePosition.Y * SCALE_STEP) ) + 0.5);
+                Console.WriteLine("MouseX=" + mousePosition.X + " mouseY=" + mousePosition.Y);
+                Console.WriteLine("resultX=" + (int)(((mousePosition.X * SCALE_STEP) / scale) + 0.5));
+                Console.WriteLine("resultY=" + (int)(((mousePosition.Y * SCALE_STEP) / scale) + 0.5));
+                Console.WriteLine("scale=" + scale);
+
             }
         }
         private void ZoomOut()
@@ -476,6 +480,8 @@ namespace FacadeCreatorApi
                 // offsetX += (int)(mousePosition.X * scaleStep);
                 //offsetY += (int)(mousePosition.Y * scaleStep);
                 scale -= SCALE_STEP;
+                offsetX += (int)(((mousePosition.X * SCALE_STEP) )+0.5);
+                offsetY += (int)(((mousePosition.Y * SCALE_STEP) ) + 0.5);
                 // offsetX += (int)(((mousePosition.X + offsetX) * scaleStep) );
                 //offsetY += (int)(((mousePosition.Y + offsetY) * scaleStep) );
 
