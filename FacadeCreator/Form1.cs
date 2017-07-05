@@ -16,7 +16,8 @@ namespace FacadeCreator
         public Form1()
         {
             InitializeComponent();
-            
+            EVD.Plugin Evd = new EVD.Plugin();
+            Evd.OnAppStartAfter(123);
             Scenes scenes = new Scenes(this);
             
         }
