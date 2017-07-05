@@ -1,4 +1,5 @@
 ﻿using FacadeCreatorApi;
+using FacadeCreatorApi.models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,10 +16,9 @@ namespace FacadeCreator
     {
         public Form1()
         {
-            InitializeComponent();
-            EVD.Plugin Evd = new EVD.Plugin();
-            Evd.OnAppStartAfter(123);
+            InitializeComponent();            
             Scenes scenes = new Scenes(this);
+            scenes.addFigure(new Facade(1, 600, 2200), 0, 0);
             
         }
         private void update(object sender, PaintEventArgs e)

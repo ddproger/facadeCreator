@@ -3,17 +3,17 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace FacadeCreatorApi.Services
 {
+
     public interface KdSdkApi
     {
-        ICollection<Facade> getFacades();
-        void applyFacadeImage(Image img);
-        bool OnFileOpenBeforeAfter(int lCallParamsBlock);
-        bool OnPluginLoad(int lCallParamsBlock);
+        ICollection<FigureOnBoard> getFacades();
+        void applyFacadeImage(Image img);     
 
     }
 }

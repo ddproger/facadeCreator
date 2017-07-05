@@ -535,7 +535,7 @@ namespace FacadeCreatorApi
         {
             addFigure(bufferedFigure.figure.copy(), x + 20, y + 20);
         }
-        private void addFigure(Figure figure, int x, int y)
+        public void addFigure(Figure figure, int x, int y)
         {
             if (figure is BkgImage)
                 bkgImages.add(new FigureOnBoard(figure, x, y));
@@ -573,11 +573,11 @@ namespace FacadeCreatorApi
             bkgImages = new FiguresCollectionImpl();
             facades = new FiguresCollectionImpl();
 
-            Image newImage = Image.FromFile("C:\\Users\\gerasymiuk\\Documents\\Visual Studio 2017\\Projects\\FacadeCreator\\FacadeCreatorApi\\bin\\Debug\\1.png");
-            addFigure(new BkgImage(newImage), 0, 0);
-            addFigure(new Facade(1,100, 150), 140, 5);
-            addFigure(new Facade(2,100,150),140,5);
-            addFigure(new Facade(3,100, 150), 340, 5);      
+            //Image newImage = Image.FromFile("C:\\Users\\gerasymiuk\\Documents\\Visual Studio 2017\\Projects\\FacadeCreator\\FacadeCreatorApi\\bin\\Debug\\1.png");
+            //addFigure(new BkgImage(newImage), 0, 0);
+            //addFigure(new Facade(1,100, 150), 140, 5);
+            //addFigure(new Facade(2,100,150),140,5);
+            //addFigure(new Facade(3,100, 150), 340, 5);      
 
 
             mnuFigure = createMenuFigure();
@@ -600,6 +600,7 @@ namespace FacadeCreatorApi
             //    MessageBox.Show(item.y.ToString());
             //}
         }      
+        
         
         
     }
