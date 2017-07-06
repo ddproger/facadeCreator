@@ -12,8 +12,8 @@ namespace FacadeCreatorApi.Services
 
     public interface KdSdkApi
     {
+        void applyFacadeImage(IDictionary<Facade, string> facades);
         ICollection<FigureOnBoard> getFacades();
-        void applyFacadeImage(Image img);     
-
+        string getScenesName();
     }
 }

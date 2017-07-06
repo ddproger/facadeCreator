@@ -14,16 +14,19 @@ namespace FacadeCreatorApi.models
     {
         
         int number=0;
+        int textureNumber = 0;
         private Font currentFont;
+        private string imagePath;
 
-        public Facade(int number, int width, int height) : base(width, height)
+        public Facade(int number, int textureNumber, int width, int height) : base(width, height)
         {
             this.number = number;
+            this.textureNumber = textureNumber;
         }
 
         public override Figure copy()
         {
-            return new Facade(number, width, height);
+            return new Facade(number,textureNumber, width, height);
         }
 
         public override void draw(Graphics context, int x, int y)
@@ -71,6 +74,25 @@ namespace FacadeCreatorApi.models
         {
             return number.ToString();
         }
-        
+        public int getNumber()
+        {
+            return number;
+        }
+        public int getTextureId()
+        {
+            return textureNumber;
+        }
+        public void setTextureId(int id)
+        {
+            this.textureNumber = id;
+        }
+        public string getImagePath()
+        {
+            return imagePath;
+        }
+        public void setImagePath(string path)
+        {
+            this.imagePath = path;
+        }
     }
 }

@@ -77,6 +77,7 @@
     <Compile Include="Services\KdSdkApiImpl.cs" />
     <Compile Include="Services\MenuItem.cs" />
     <Compile Include="Services\MenuItemImpl.cs" />
+    <Compile Include="Services\StringResources.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forms\MainForm.resx">

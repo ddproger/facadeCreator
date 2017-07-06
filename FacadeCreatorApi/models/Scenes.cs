@@ -19,6 +19,7 @@ namespace FacadeCreatorApi
         private const int ARRAY_SIZE_STEP = 10;
         private const float SCALE_STEP = 0.1f;
 
+        KdSdkApi kdApi;
         Control canvas;
         ContextMenuStrip mnuFigure;
         ContextMenuStrip mnuCanvas;
@@ -343,7 +344,8 @@ namespace FacadeCreatorApi
         {
             Rectangle areaSize = getBordersOfCanvas();
             Bitmap image = generateFullGrapics(areaSize);
-            ImageConversion.generateFacades(areaSize, image, facades);
+            IDictionary<Facade,string> facades =  ImageConversion.generateFacades(areaSize, image, this.facades, kdApi.getScenesName());
+            kdApi.applyFacadeImage(facades);
         }
         private void mnuEnableEditPosition_Click(object sender, EventArgs e)
         {
@@ -562,14 +564,11 @@ namespace FacadeCreatorApi
         }
         #endregion
 
-        public static void Main(string[] args)
-        {
-            MessageBox.Show("Main");
-        }
-        public Scenes(Control canvas)
+        
+        public Scenes(Control canvas, KdSdkApi kdApi)
         {
             this.canvas = canvas;
-
+            this.kdApi = kdApi;
             bkgImages = new FiguresCollectionImpl();
             facades = new FiguresCollectionImpl();
 

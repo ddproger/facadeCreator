@@ -1,5 +1,6 @@
 ﻿using FacadeCreatorApi;
 using FacadeCreatorApi.models;
+using FacadeCreatorApi.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,8 +18,8 @@ namespace FacadeCreator
         public Form1()
         {
             InitializeComponent();            
-            Scenes scenes = new Scenes(this);
-            scenes.addFigure(new Facade(1, 600, 2200), 0, 0);
+            Scenes scenes = new Scenes(this,new KdSdkApiImpl(1));
+            scenes.addFigure(new Facade(1, 1, 600, 2200), 0, 0);
             
         }
         private void update(object sender, PaintEventArgs e)

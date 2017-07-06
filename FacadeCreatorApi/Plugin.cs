@@ -29,7 +29,7 @@ namespace FacadeCreatorApi
         public bool OnPluginLoad(int iCallParamsBlock)
         {
             KdSdkApiImpl kdApi = new KdSdkApiImpl(iCallParamsBlock);
-            kdApi.updateCatalog(iCallParamsBlock);
+            //kdApi.updatePalitra();
             AddMenu(iCallParamsBlock);
             return true;
         }
@@ -67,10 +67,10 @@ namespace FacadeCreatorApi
 
         public bool CallMe(int iCallParamsBlock)
         {
-            MainForm frm = new MainForm();
-            Scenes scenes = new Scenes(frm);
+            MainForm frm = new MainForm();    
 
             KdSdkApi kdApi = new KdSdkApiImpl(iCallParamsBlock);
+            Scenes scenes = new Scenes(frm,kdApi);
             ICollection<FigureOnBoard> facades = kdApi.getFacades();
             foreach (FigureOnBoard item in facades)
             {
