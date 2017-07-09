@@ -1,16 +1,11 @@
-﻿
-using KD.SDK;
+﻿using KD.SDK;
 using System;
-using System.Runtime.InteropServices;
 using FacadeCreatorApi.models;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace FacadeCreatorApi.Services
 {
-
-
     public class KdSdkApiImpl : KdSdkApi
     {
         Appli _appli;
@@ -19,7 +14,7 @@ namespace FacadeCreatorApi.Services
         public KdSdkApiImpl(int iParamsBlock)
         {
             this.iParamsBlock = iParamsBlock;
-            this._appli = new Appli();
+            _appli = new Appli();
             _scene = _appli.Scene;
         }
 
@@ -27,8 +22,18 @@ namespace FacadeCreatorApi.Services
         public ICollection<FigureOnBoard> getFacades()
         {
             LinkedList<FigureOnBoard> facades = new LinkedList<FigureOnBoard>();
-            _appli.StartSessionFromCallParams(iParamsBlock);
+            try
+            {
+                _appli.StartSessionFromCallParams(iParamsBlock);
+            }catch(Exception e)
+            {
+                throw new MethodAccessException("Cannot start session: " + e.StackTrace);
+            }
             int n = _scene.SelectionGetObjectsNb();
+            if (n < 1)
+            {
+                throw new ArgumentNullException("Please selected object in scene");
+            }
             int objectId = 0;
 
             float x = 0, y = 0, z=0, width = 0, height = 0, angle=0, heightScenes,xScenes,yScenes, minX=float.MaxValue,minY= float.MaxValue;
@@ -49,7 +54,14 @@ namespace FacadeCreatorApi.Services
                 int textureNumber = -1;
                 if (!textureNum.Equals(""))
                 {
-                    textureNum = textureNum.Split(";,".ToCharArray())[1];                    
+                    try
+                    {
+                        textureNum = textureNum.Split(";,".ToCharArray())[1];
+                    }
+                    catch (Exception)
+                    {
+                        textureNumber = -1;
+                    }
                     if (!Int32.TryParse(textureNum, out textureNumber))
                     {
                         textureNumber = -1;
@@ -65,19 +77,28 @@ namespace FacadeCreatorApi.Services
                     float.TryParse(_scene.ObjectGetInfo(objectId, SceneEnum.ObjectInfo.ANGLEXY), out angle) &&
                     float.TryParse(_scene.ObjectGetInfo(objectId, SceneEnum.ObjectInfo.ANGLEXY), out angle))
                 {
-                    FigureOnBoard fig = createFacadeOnBoardFromKdScenes(objectId, textureNumber, x, y, z, width, height, angle, xScenes, yScenes, heightScenes, onOrUnder, 10);
+                    FigureOnBoard fig = createFacadeOnBoardFromKdScenes(objectId, textureNumber, x, y, z, width, height, angle, xScenes, yScenes, heightScenes, onOrUnder, getSceneDimension());
                     if (fig.x < minX) minX = fig.x;
                     if (fig.y < minY) minY = fig.y;
                     facades.AddLast(fig);                    
                 }
                 else { MessageBox.Show("I cant get all values from object"); }
-        }
+            }
             foreach (FigureOnBoard item in facades)
             {
                 item.x -= (int)minX;
                 item.y -= (int)minY;
             }
             return facades;
+        }
+
+        private int getSceneDimension()
+        {
+            int dimension = 0;
+            if(!Int32.TryParse(_appli.Scene.SceneGetInfo(SceneEnum.SceneInfo.UNITDIVISIONSNB),out dimension)){
+                return 10;
+            }
+            return dimension;
         }
 
         private FigureOnBoard createFacadeOnBoardFromKdScenes(int facadeId,int textureNumber, float x,float y, float z, float width, float height, float angle, float xScenes, float yScenes, float heightScenes, int onOrUnder, int dimensionSizeScenes)
@@ -114,7 +135,7 @@ namespace FacadeCreatorApi.Services
             //    //MessageBox.Show("componentID=" + componentId + " " + _scene.ObjectGetInfo(componentId, SceneEnum.ObjectInfo.BLOCKCODE));
             //    if (_scene.ObjectGetInfo(componentId, SceneEnum.ObjectInfo.BLOCKCODE).Equals(labelString)) return true;
             //}
-            return false;
+            return true;
         }
         public void applyFacadeImage(IDictionary<Facade, string> facades)
         {

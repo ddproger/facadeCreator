@@ -38,7 +38,7 @@
             this.DoubleBuffered = true;
             this.MaximizeBox = false;
             this.Name = "MainForm";
-            this.Text = "MainForm";
+            this.Text = "Редактор фасадов";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.ResumeLayout(false);
 

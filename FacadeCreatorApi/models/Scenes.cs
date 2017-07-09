@@ -39,7 +39,40 @@ namespace FacadeCreatorApi
         bool cntrEnabled = false;
         bool isMouseDown = false;
         bool canMovedFacadeMode = false;
+        public Scenes(Control canvas, KdSdkApi kdApi)
+        {
+            this.canvas = canvas;
+            this.kdApi = kdApi;
+            bkgImages = new FiguresCollectionImpl();
+            facades = new FiguresCollectionImpl();
 
+            //Image newImage = Image.FromFile("C:\\Users\\gerasymiuk\\Documents\\Visual Studio 2017\\Projects\\FacadeCreator\\FacadeCreatorApi\\bin\\Debug\\1.png");
+            //addFigure(new BkgImage(newImage), 0, 0);
+            //addFigure(new Facade(1,100, 150), 140, 5);
+            //addFigure(new Facade(2,100,150),140,5);
+            //addFigure(new Facade(3,100, 150), 340, 5);      
+
+
+            mnuFigure = createMenuFigure();
+            mnuCanvas = createMenuCanvas();
+
+            canvas.MouseDown += new MouseEventHandler(mouseDown);
+            canvas.MouseMove += new MouseEventHandler(mouseMove);
+            canvas.MouseUp += new MouseEventHandler(mouseUp);
+            canvas.MouseWheel += startScale;
+            canvas.KeyDown += new KeyEventHandler(keyDown);
+            canvas.KeyUp += new KeyEventHandler(keyUp);
+            canvas.Paint += new PaintEventHandler(paint);
+
+            //FiguresCollection col = new FiguresCollectionImpl();
+            //col.add(new FigureOnBoard(new Facade(1,10, 20), 12, 21));
+            //col.add(new FigureOnBoard(new Facade(2,10, 30), 12, 22));
+            //col.add(new FigureOnBoard(new Facade(3,10, 40), 12, 23));
+            //foreach (FigureOnBoard item in col.getReverseCollection())
+            //{
+            //    MessageBox.Show(item.y.ToString());
+            //}
+        }
         #region createMethods
         private ContextMenuStrip createMenuCanvas()
         {
@@ -342,11 +375,30 @@ namespace FacadeCreatorApi
         }
         private void mnuCreateHowPhotoFacade_Click(object sender, EventArgs e)
         {
-            Rectangle areaSize = getBordersOfCanvas();
-            Bitmap image = generateFullGrapics(areaSize);
-            IDictionary<Facade,string> facades =  ImageConversion.generateFacades(areaSize, image, this.facades, kdApi.getScenesName());
-            kdApi.applyFacadeImage(facades);
+            try
+            {
+                Rectangle areaSize = getBordersOfCanvas();
+                Bitmap image = generateFullGrapics(areaSize);
+                IDictionary<Facade, string> facades = ImageConversion.generateFacades(areaSize, image, this.facades, kdApi.getScenesName());
+                kdApi.applyFacadeImage(facades);
+                closePlugin();
+            }catch(Exception ex)
+            {
+                MessageBox.Show(ex.StackTrace);
+            }            
         }
+
+        private void closePlugin()
+        {
+            if(canvas is Form)
+            {
+                Form frm = (Form)canvas;
+                frm.Close();
+            }
+            //Application.Exit();
+            //Environment.Exit(0);
+        }
+
         private void mnuEnableEditPosition_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem menu = ((ToolStripMenuItem)sender);
@@ -396,7 +448,10 @@ namespace FacadeCreatorApi
         #region work with graphics
         private Bitmap generateFullGrapics(Rectangle areaSize)
         {
-
+            if (areaSize.Width == 0 || areaSize.Height == 0)
+            {
+                throw new ArgumentException("One or more arguments are zero");
+            }
             Bitmap newImage = new Bitmap(areaSize.Width, areaSize.Height);
             Graphics graphics = Graphics.FromImage(newImage);
             //graphics.TranslateTransform(areaSize.X, areaSize.Y);
@@ -562,44 +617,7 @@ namespace FacadeCreatorApi
         {
             return bkgImages.getIndex(selectedFigure);
         }
-        #endregion
-
-        
-        public Scenes(Control canvas, KdSdkApi kdApi)
-        {
-            this.canvas = canvas;
-            this.kdApi = kdApi;
-            bkgImages = new FiguresCollectionImpl();
-            facades = new FiguresCollectionImpl();
-
-            //Image newImage = Image.FromFile("C:\\Users\\gerasymiuk\\Documents\\Visual Studio 2017\\Projects\\FacadeCreator\\FacadeCreatorApi\\bin\\Debug\\1.png");
-            //addFigure(new BkgImage(newImage), 0, 0);
-            //addFigure(new Facade(1,100, 150), 140, 5);
-            //addFigure(new Facade(2,100,150),140,5);
-            //addFigure(new Facade(3,100, 150), 340, 5);      
-
-
-            mnuFigure = createMenuFigure();
-            mnuCanvas = createMenuCanvas();
-
-            canvas.MouseDown += new MouseEventHandler(mouseDown);
-            canvas.MouseMove += new MouseEventHandler(mouseMove);
-            canvas.MouseUp += new MouseEventHandler(mouseUp);
-            canvas.MouseWheel += startScale;
-            canvas.KeyDown += new KeyEventHandler(keyDown);
-            canvas.KeyUp += new KeyEventHandler(keyUp);
-            canvas.Paint += new PaintEventHandler(paint);
-
-            //FiguresCollection col = new FiguresCollectionImpl();
-            //col.add(new FigureOnBoard(new Facade(1,10, 20), 12, 21));
-            //col.add(new FigureOnBoard(new Facade(2,10, 30), 12, 22));
-            //col.add(new FigureOnBoard(new Facade(3,10, 40), 12, 23));
-            //foreach (FigureOnBoard item in col.getReverseCollection())
-            //{
-            //    MessageBox.Show(item.y.ToString());
-            //}
-        }      
-        
+        #endregion    
         
         
     }

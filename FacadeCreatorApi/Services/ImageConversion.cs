@@ -24,26 +24,25 @@ namespace FacadeCreatorApi.Services
                     img = new Bitmap(item.figure.width, item.figure.height);
                     using(Graphics gp = Graphics.FromImage(img))
                     {
-                    alternativeName = StringResources.getResourcePathWithoutAbsolute() + "\\" + scenesName + item.figure.ToString() + ".jpg";
-                    pathToImage = StringResources.getResourcesPath()+ "\\"+ scenesName + item.figure.ToString() + ".jpg";
-                        MessageBox.Show(pathToImage);
-                    try
-                    {
-                        gp.DrawImage(image, new Rectangle(0, 0, img.Width, img.Height), new Rectangle(item.x - areaSize.X, item.y - areaSize.Y, img.Width, img.Height), GraphicsUnit.Pixel);
-                    }
-                    catch (Exception e)
-                    {
-                        MessageBox.Show("Cannot Draw Image!!" + e.StackTrace);
-                    }
-                    try
-                    {
-                        img.Save(pathToImage, ImageFormat.Jpeg);
-                    }
-                    catch (Exception e)
-                    {
-
-                        MessageBox.Show("Cannot Save Image!!" + e.StackTrace);
-                    }
+                        alternativeName = StringResources.getResourcePathWithoutAbsolute() + "\\" + scenesName + item.figure.ToString() + ".jpg";
+                        pathToImage = StringResources.getResourcesPath()+ "\\"+ scenesName + item.figure.ToString() + ".jpg";
+                            MessageBox.Show(pathToImage);
+                        try
+                        {
+                            gp.DrawImage(image, new Rectangle(0, 0, img.Width, img.Height), new Rectangle(item.x - areaSize.X, item.y - areaSize.Y, img.Width, img.Height), GraphicsUnit.Pixel);
+                        }
+                        catch (Exception e)
+                        {
+                            throw new Exception("Cannot Draw Image!!\n" + e.StackTrace);
+                        }
+                        try
+                        {
+                            img.Save(pathToImage, ImageFormat.Jpeg);
+                        }
+                        catch (Exception)
+                        {
+                            throw new System.IO.FileNotFoundException("Cannot Save Image!!");
+                        }
                         facades.Add((Facade)item.figure, alternativeName);
                     }
                     //img = new Bitmap(image.Clone(new Rectangle(item.x, item.y, item.figure.width, item.figure.height), image.PixelFormat           

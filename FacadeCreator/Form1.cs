@@ -18,9 +18,9 @@ namespace FacadeCreator
         public Form1()
         {
             InitializeComponent();            
-            Scenes scenes = new Scenes(this,new KdSdkApiImpl(1));
+            Scenes scenes = new Scenes(this,null);
             scenes.addFigure(new Facade(1, 1, 600, 2200), 0, 0);
-            
+            scenes.addFigure(new BkgImage(new Bitmap("C:\\InSitu\\Textures\\images\\image44.jpg")), 0, 0);
         }
         private void update(object sender, PaintEventArgs e)
         {

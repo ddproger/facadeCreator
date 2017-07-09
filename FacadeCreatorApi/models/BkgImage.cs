@@ -12,18 +12,18 @@ namespace FacadeCreatorApi.models
     [ComVisible(false)]
     public class BkgImage : Figure
     {
-        private static int constScale=5;
         private Image img;
         public BkgImage(Image img) : base(img.Width, img.Height)
         {
             this.img = img;
+            updateResolution();
         }
 
         public override Figure copy()
         {
             BkgImage newBkgImage = new BkgImage(img);
             newBkgImage.height = this.height;
-            newBkgImage.width = this.height;
+            newBkgImage.width = this.width;
             newBkgImage.updateResolution();
             return newBkgImage;
         }
@@ -43,12 +43,12 @@ namespace FacadeCreatorApi.models
             }
             int c = 0;
             Action action = Action.SHIFT;
-            if (Math.Abs(x - width) < 5)
+            if (Math.Abs(x - width) < 10)
             {
                 action = Action.SIZE_WE;
                 c++;
             }
-            if (Math.Abs(y - height) < 5)
+            if (Math.Abs(y - height) < 10)
             {
                 action = Action.SIZE_NS;
                 c++;

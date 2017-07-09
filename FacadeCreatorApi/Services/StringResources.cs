@@ -8,13 +8,24 @@ namespace FacadeCreatorApi.Services
 {
     public class StringResources
     {
+        private static KD.SDK.Appli kdApi;
+        private static string ABSOLUTE_PATH;
+        private static string CATALOGS_PATH;
+        private static string SCENES_PATH;
+        static StringResources(){
+            kdApi = new KD.SDK.Appli();
+             ABSOLUTE_PATH = kdApi.AppliGetInfo(KD.SDK.AppliEnum.Info.EXE_DIR);
+            CATALOGS_PATH = kdApi.AppliGetInfo(KD.SDK.AppliEnum.Info.CATALOGS_DIR);
+            SCENES_PATH = kdApi.AppliGetInfo(KD.SDK.AppliEnum.Info.SCENES_DIR);
+            kdApi = null;
+        }
         public static string getAbsolutePath()
         {
-            return "C:\\InSitu";
+            return ABSOLUTE_PATH;
         }
         public static string getCatalogsPath()
         {
-            return "C:\\InSitu\\Catalogs";
+            return CATALOGS_PATH;
         }
         public static string getObjectLabelText()
         {

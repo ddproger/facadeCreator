@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace FacadeCreatorApi
 {
@@ -46,11 +47,11 @@ namespace FacadeCreatorApi
                                                                  //string MENU_ITEM_PLUGIN_NAME = "KD.Plugin.Tiny.dll"; // can be an external plugin dll like "KD.Plugin.Tiny.dll" must be declared in SPACE.INI in dll case
             string MENU_ITEM_PLUGIN_METHOD_NAME = "CallMe"; // can be an external plugin dll like "KD.Plugin.Tiny.dll" must be declared in SPACE.INI in dll case
             int menuID = CurrentAppli.InsertMenuItemFromId(MENU_ITEM_TEXT, /* menuItemText */
-                                                            KD.SDK.AppliEnum.ControlKey.CK_CONTROL, /* accelControlKey */
-                                                            KD.SDK.AppliEnum.VirtualKeyCode.VirtualKey_M, /* accelKeyCode */
+                                                            KD.SDK.AppliEnum.ControlKey.CK_NONE, /* accelControlKey */
+                                                            KD.SDK.AppliEnum.VirtualKeyCode.VirtualKey_NONE, /* accelKeyCode */
                                                             String.Empty, /* iconFileName */
                                                             true, /* InsertBefore */
-                                                            (int)KD.SDK.AppliEnum.ObjectMenuItemsId.INFOS, /* menuPosition */
+                                                            (int)KD.SDK.AppliEnum.ObjectMenuItemsId.COMPONENTS, /* menuPosition */
                                                             MENU_ITEM_PLUGIN_NAME, /* pluginDllFileName, */
                                                             "Plugin", /* className */
                                                             MENU_ITEM_PLUGIN_METHOD_NAME/* functionName */);
@@ -71,12 +72,29 @@ namespace FacadeCreatorApi
 
             KdSdkApi kdApi = new KdSdkApiImpl(iCallParamsBlock);
             Scenes scenes = new Scenes(frm,kdApi);
-            ICollection<FigureOnBoard> facades = kdApi.getFacades();
+            ICollection<FigureOnBoard> facades;
+            try
+            {
+                facades = kdApi.getFacades();
+            }catch(Exception e)
+            {
+                MessageBox.Show(e.Message);
+                return false;
+            }
+            
             foreach (FigureOnBoard item in facades)
             {
-                scenes.addFigure(item.figure, item.x, item.y);
+                if(item.figure.width==0||item.figure.height ==0)
+                {
+                    MessageBox.Show("Element with id:"+item.figure+" have one or more zero parameters");
+                }else scenes.addFigure(item.figure, item.x, item.y);
             }
             //scenes.addFigure(new Facade(21, 100, 100), 0, 0);
+            if (facades.Count < 1)
+            {
+                MessageBox.Show("Not selected item mathed, check your elements property");
+                return false;
+            }
             frm.ShowDialog();
             return true;
         }
