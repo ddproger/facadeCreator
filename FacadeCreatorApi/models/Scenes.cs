@@ -1,4 +1,5 @@
-﻿using FacadeCreatorApi.models;
+﻿using FacadeCreatorApi.Forms;
+using FacadeCreatorApi.models;
 using FacadeCreatorApi.Services;
 using System;
 using System.Collections;
@@ -63,6 +64,7 @@ namespace FacadeCreatorApi
             canvas.KeyDown += new KeyEventHandler(keyDown);
             canvas.KeyUp += new KeyEventHandler(keyUp);
             canvas.Paint += new PaintEventHandler(paint);
+            canvas.DoubleClick += new EventHandler(canvas_double_click);
 
             //FiguresCollection col = new FiguresCollectionImpl();
             //col.add(new FigureOnBoard(new Facade(1,10, 20), 12, 21));
@@ -73,6 +75,8 @@ namespace FacadeCreatorApi
             //    MessageBox.Show(item.y.ToString());
             //}
         }
+
+
         #region createMethods
         private ContextMenuStrip createMenuCanvas()
         {
@@ -94,7 +98,7 @@ namespace FacadeCreatorApi
             menuItems.AddLast(new MenuItemImpl("mnuDelete", "Удалить", null, mhuDeleteFigure_Click));
             menuItems.AddLast(new MenuItemImpl("mnuPosition", "Положение", null, null));
             menuItems.AddLast(new MenuItemImpl("mnuCopy", "Копировать", null, mnuCopy_Click));
-
+            menuItems.AddLast(new MenuItemImpl("mnuGetProperty", "Свойства", null, canvas_double_click));
 
             ContextMenuBuilder menuBuilder = new ContextMenuBuilder(menuItems);
             menuBuilder.addToExistingStrip("mnuPosition", new MenuItemImpl("mnuLevelUp", "На уровень вышe", null, mnuUp_Click));
@@ -103,9 +107,25 @@ namespace FacadeCreatorApi
             menuBuilder.addToExistingStrip("mnuPosition", new MenuItemImpl("mnuLevelUp", "На задний план", null, mnuToBack_Click));
             return menuBuilder.getContext();
         }
+
+
         #endregion
 
         #region Event Listener methods
+
+        private void canvas_double_click(object sender, EventArgs e)
+        {
+            if (selectedFigure != null && !(selectedFigure.figure is Facade))
+            {
+                PropertyForm frm = new PropertyForm(selectedFigure.figure.width, selectedFigure.figure.height);
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    selectedFigure.figure.width = frm.width;
+                    selectedFigure.figure.height = frm.height;
+                    UpdateGraphics();
+                }
+            }
+        }
         private void mnuPaste_Click(object sender, EventArgs e)
         {
             pasteBuferedFigure(bufferedFigure.x, bufferedFigure.y);
@@ -134,7 +154,7 @@ namespace FacadeCreatorApi
             {
                 if (e.Delta > 0) ZoomIn();
                 else ZoomOut();
-
+                Figure.setDelta(scale);
                 UpdateGraphics();
             }
 
@@ -375,16 +395,17 @@ namespace FacadeCreatorApi
         }
         private void mnuCreateHowPhotoFacade_Click(object sender, EventArgs e)
         {
+            Rectangle areaSize = new Rectangle() ;
             try
             {
-                Rectangle areaSize = getBordersOfCanvas();
+                areaSize = getBordersOfCanvas();
                 Bitmap image = generateFullGrapics(areaSize);
                 IDictionary<Facade, string> facades = ImageConversion.generateFacades(areaSize, image, this.facades, kdApi.getScenesName());
                 kdApi.applyFacadeImage(facades);
                 closePlugin();
             }catch(Exception ex)
             {
-                MessageBox.Show(ex.StackTrace);
+                MessageBox.Show(areaSize.ToString());
             }            
         }
 
@@ -455,7 +476,7 @@ namespace FacadeCreatorApi
             Bitmap newImage = new Bitmap(areaSize.Width, areaSize.Height);
             Graphics graphics = Graphics.FromImage(newImage);
             //graphics.TranslateTransform(areaSize.X, areaSize.Y);
-            graphics.FillRectangle(Brushes.White, 0, 0, areaSize.Width-areaSize.X, areaSize.Height - areaSize.Y);
+            graphics.FillRectangle(Brushes.White, 0, 0, areaSize.Width, areaSize.Height);
             foreach (FigureOnBoard item in bkgImages)
             {
                 item.figure.draw(graphics, item.x-areaSize.X, item.y-areaSize.Y);
@@ -488,9 +509,13 @@ namespace FacadeCreatorApi
         #endregion
 
         #region work with positions
+        public void scalingToAllFigureisVisibleMode()
+        {
+            scale = 0.5f;
+        }
         private Rectangle getBordersOfCanvas()
         {
-            int minX=0,minY=0, maxX=0, maxY=0, curX, curY;
+            int minX=int.MaxValue,minY=int.MaxValue, maxX=0, maxY=0, curX, curY;
             foreach (FigureOnBoard item in bkgImages)
             {
                 curX = item.x + item.figure.width;
@@ -505,9 +530,9 @@ namespace FacadeCreatorApi
                 curX = item.x + item.figure.width;
                 curY = item.y + item.figure.height;
                 if (curX > maxX) maxX = curX;
-                else if (curY > maxY) maxY = curY;
+                if (curY > maxY) maxY = curY;
                 if (item.x < minX) minX = item.x;
-                else if (item.y < minY) minY = item.y;
+                if (item.y < minY) minY = item.y;
             }
             maxX -= minX;
             maxY -= minY;
@@ -529,6 +554,7 @@ namespace FacadeCreatorApi
             if (scale <= MAX_ZOOM)
             {
                 scale += SCALE_STEP;
+                
                 //offsetX -= (int)(((mousePosition.X + offsetX) * scaleStep) );
                 //offsetY -= (int)(((mousePosition.Y + offsetY) * scaleStep) );
                 float x = mousePosition.X * SCALE_STEP;

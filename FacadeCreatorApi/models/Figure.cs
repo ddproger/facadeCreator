@@ -10,11 +10,19 @@ using System.Windows.Forms;
 namespace FacadeCreatorApi.models
 {
     [ComVisible(false)]
+    
     public enum Action{
         SIZE_NS, SIZE_WE, SIZE_NWSE,SIZE_NWSE_WR,SHIFT, NO
     }
     public abstract class Figure
     {
+        protected static float delta = 1;
+        public static void setDelta(float delta)
+        {
+            if(delta>0&&delta<5)
+            Figure.delta = delta;
+        }
+       
         private const int MIN_WIDTH = 5;
         private const int MIN_HEIGHT = 5;
 
@@ -50,7 +58,7 @@ namespace FacadeCreatorApi.models
         public bool isPointInFigure(int x, int y)
         {
             if (x < 0 || y < 0) return false;
-            if (x <= width && y <= height) return true;
+            if (x <= width+5/delta && y <= height + 5 / delta) return true;
             else return false;
         }
         public void setSizeFromForm(Figure fig)

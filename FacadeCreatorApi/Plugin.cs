@@ -3,6 +3,7 @@ using FacadeCreatorApi.models;
 using FacadeCreatorApi.Services;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -95,6 +96,11 @@ namespace FacadeCreatorApi
                 MessageBox.Show("Not selected item mathed, check your elements property");
                 return false;
             }
+            String path = StringResources.getResourcesPath();
+            if (!Directory.Exists(path)){
+                Directory.CreateDirectory(path);
+            }
+            scenes.scalingToAllFigureisVisibleMode();
             frm.ShowDialog();
             return true;
         }

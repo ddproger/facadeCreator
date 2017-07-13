@@ -44,16 +44,16 @@ namespace FacadeCreatorApi.models
 
         private void updateFont(Graphics context,string text)
         {
-            int fontSize = 12;
+            int fontSize = 4;
             
             Font font = new Font("Arial", fontSize);
             SizeF size = context.MeasureString(text, font);
-            for (; size.Width < width - 20 && size.Height < height - 20; fontSize += 12)
+            for (; size.Width < width - 20 && size.Height < height - 20; fontSize += 4)
             {
                 font = new Font("Arial", fontSize);
                 size = context.MeasureString(text, font);
             }
-            currentFont = new Font("Arial", fontSize - 12);
+            currentFont = new Font("Arial", fontSize );
         }
 
         public override Action getAction(int x, int y, bool cntrl)

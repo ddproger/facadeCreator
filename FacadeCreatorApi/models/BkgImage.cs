@@ -43,12 +43,12 @@ namespace FacadeCreatorApi.models
             }
             int c = 0;
             Action action = Action.SHIFT;
-            if (Math.Abs(x - width) < 10)
+            if (Math.Abs(x - width) < 5/delta)
             {
                 action = Action.SIZE_WE;
                 c++;
             }
-            if (Math.Abs(y - height) < 10)
+            if (Math.Abs(y - height) < 5/delta)
             {
                 action = Action.SIZE_NS;
                 c++;

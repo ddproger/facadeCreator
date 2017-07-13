@@ -143,12 +143,19 @@ namespace FacadeCreatorApi.Services
             
             catalog.SessionId = _appli.StartSessionFromCallParams(iParamsBlock);
             if (catalog.FileLoad(StringResources.getCatalogsPath() + "\\@tx_pal.cat", "")){
+                
                 String project = _scene.SceneGetInfo(SceneEnum.SceneInfo.NAME);
                 //MessageBox.Show("isLoad=" + catalog.IsLoaded() + " " + catalog.GetInfo(CatalogEnum.InfoId.FILENAME));
                 int n = catalog.TableGetLinesNb(CatalogEnum.TableId.TEXTURES,0);
+                catalog.TableAddLines(CatalogEnum.TableId.TEXTURES, 0, 1);
+                catalog.TableDeleteLines(CatalogEnum.TableId.TEXTURES, 0, n, 1);
                 int textureIndex = 0;
                 int TextureKey;
+
+                Random rand = new Random();
                 //MessageBox.Show(facades.Count.ToString());
+                string strWidth;
+                int oldWidth, newWidth;
                 foreach (KeyValuePair<Facade,string> item in facades)
                 {
                     //MessageBox.Show(item.Key.getTextureId().ToString());
@@ -170,18 +177,20 @@ namespace FacadeCreatorApi.Services
                         }
                         item.Key.setTextureId(TextureKey);
                     }
-                    
+                    strWidth = catalog.TableGetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 4);
+                    Int32.TryParse(strWidth, out oldWidth);
+                    if (oldWidth > item.Key.width) newWidth = item.Key.width;
+                    else newWidth = oldWidth+1;
                     //MessageBox.Show("edit "+ textureIndex + " line, with "+ TextureKey + " kod");
-
                     catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 0, TextureKey.ToString());
-                    catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 1, project+item.Key.getNumber());
+                    catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 1, project+item.Key.getNumber() + rand.Next(1,10));
                     catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 3, item.Value);
-                    catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 4, item.Key.width.ToString());
+                    catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 4, newWidth.ToString());
                     catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 5, item.Key.height.ToString());
                     //catalog.FileSave(StringResources.getCatalogsPath() + "\\@tx_pal.cat");
                     MessageBox.Show(catalog.TableGetLine(CatalogEnum.TableId.TEXTURES, 0, textureIndex));
                     //n++;
-                    //nextTextureKey++;                   
+                    //nextTextureKey++; 
                 }
                 if(catalog.FileSave(StringResources.getCatalogsPath() + "\\@tx_pal.cat"))
                 {
