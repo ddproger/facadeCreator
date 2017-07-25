@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FacadeCreatorApi.models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,6 +13,7 @@ namespace FacadeCreatorApi.Forms
 {
     public partial class PropertyForm : Form
     {
+        private Figure figure;
         public int width
         {
             get
@@ -34,11 +36,12 @@ namespace FacadeCreatorApi.Forms
         {
             InitializeComponent();
         }
-        public PropertyForm(int width,int height)
+        public PropertyForm(Figure fig)
         {
             InitializeComponent();
-            txtHeight.Text = height.ToString();
-            txtWidth.Text = width.ToString();
+            figure = fig;
+            txtHeight.Text = fig.height.ToString();
+            txtWidth.Text = fig.width.ToString();
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -60,6 +63,21 @@ namespace FacadeCreatorApi.Forms
         {
             this.DialogResult = DialogResult.Cancel;
             this.Close();
+        }
+
+        private void txtWidthKeyUped(object sender, KeyEventArgs e)
+        {
+            if (chSavingResolution.Checked && width != 0)
+            {
+                txtHeight.Text = ((Int32)((width+0.5) * figure.getResolution())).ToString();
+            }
+        }
+        private void txtHeightKeyUped(object sender, KeyEventArgs e)
+        {
+            if (chSavingResolution.Checked && height != 0)
+            {
+                txtWidth.Text = ((Int32)((height+0.5) / figure.getResolution())).ToString();
+            }
         }
     }
 }

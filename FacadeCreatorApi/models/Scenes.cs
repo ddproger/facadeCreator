@@ -117,7 +117,7 @@ namespace FacadeCreatorApi
         {
             if (selectedFigure != null && !(selectedFigure.figure is Facade))
             {
-                PropertyForm frm = new PropertyForm(selectedFigure.figure.width, selectedFigure.figure.height);
+                PropertyForm frm = new PropertyForm(selectedFigure.figure);
                 if (frm.ShowDialog() == DialogResult.OK)
                 {
                     selectedFigure.figure.width = frm.width;
@@ -383,7 +383,19 @@ namespace FacadeCreatorApi
         }
         private void mnuCreateHowSandblast_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            Rectangle areaSize = new Rectangle();
+            try
+            {
+                areaSize = getBordersOfCanvas();
+                Bitmap image = generateFullGrapics(areaSize);
+                IDictionary<Facade, string> facades = ImageConversion.generateFacades(areaSize, image, this.facades, kdApi.getScenesName());
+                kdApi.applyFacadeImageHowSandblast(facades);
+                closePlugin();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(areaSize.ToString());
+            }
         }
         private void mnuAddImage_Click(object sender, EventArgs e)
         {

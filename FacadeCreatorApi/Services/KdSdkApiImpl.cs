@@ -241,5 +241,100 @@ namespace FacadeCreatorApi.Services
         {
            return _scene.SceneGetInfo(SceneEnum.SceneInfo.NAME);
         }
+
+        public void applyFacadeImageHowSandblast(IDictionary<Facade, string> facades)
+        {
+            KD.SDK.Catalog catalog = _appli.Catalog;
+
+            catalog.SessionId = _appli.StartSessionFromCallParams(iParamsBlock);
+            if (catalog.FileLoad(StringResources.getCatalogsPath() + "\\@tx_pal.cat", ""))
+            {
+
+                String project = _scene.SceneGetInfo(SceneEnum.SceneInfo.NAME);
+                //MessageBox.Show("isLoad=" + catalog.IsLoaded() + " " + catalog.GetInfo(CatalogEnum.InfoId.FILENAME));
+                int n = catalog.TableGetLinesNb(CatalogEnum.TableId.TEXTURES, 0);
+                catalog.TableAddLines(CatalogEnum.TableId.TEXTURES, 0, 1);
+                catalog.TableDeleteLines(CatalogEnum.TableId.TEXTURES, 0, n, 1);
+                int textureIndex = 0;
+                int TextureKey;
+
+                Random rand = new Random();
+                //MessageBox.Show(facades.Count.ToString());
+                string strWidth;
+                int oldWidth, newWidth;
+                foreach (KeyValuePair<Facade, string> item in facades)
+                {
+                    //MessageBox.Show(item.Key.getTextureId().ToString());
+                    if (item.Key.getTextureId() != -1)
+                    {
+                        textureIndex = catalog.TableGetLineRankFromCode(CatalogEnum.TableId.TEXTURES, 0, 0, item.Key.getTextureId().ToString(), false);
+                        TextureKey = item.Key.getTextureId();
+                        MessageBox.Show("texture index = " + textureIndex);
+                    }
+                    else
+                    {
+                        catalog.TableAddLines(CatalogEnum.TableId.TEXTURES, 0, 1);
+                        textureIndex = n++;
+                        TextureKey = textureIndex + 1;
+                        while (catalog.TableGetLineRankFromCode(CatalogEnum.TableId.TEXTURES, 0, 0, TextureKey.ToString(), false) != -1)
+                        {
+                            //MessageBox.Show("key: " + TextureKey + " alreadyExist\n"+ catalog.TableGetLineRankFromCode(CatalogEnum.TableId.TEXTURES, 0, 0, TextureKey.ToString(), false));
+                            TextureKey++;
+                        }
+                        item.Key.setTextureId(TextureKey);
+                    }
+                    strWidth = catalog.TableGetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 4);
+                    Int32.TryParse(strWidth, out oldWidth);
+                    if (oldWidth > item.Key.width) newWidth = item.Key.width;
+                    else newWidth = oldWidth + 1;
+                    //MessageBox.Show("edit "+ textureIndex + " line, with "+ TextureKey + " kod");
+                    catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 0, TextureKey.ToString());
+                    catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 1, project + item.Key.getNumber() + rand.Next(1, 10));
+                    catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 3, StringResources.getResourcePathWithoutAbsolute()+"\\gray.jpg");
+
+                    catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 4, "0");
+                    catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 5, "0");
+
+                    catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 10, item.Value);
+                    catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 11, newWidth.ToString());
+                    catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 12, item.Key.height.ToString());
+                    catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 13, "0");
+                    catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 15, "1");
+                    catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 16, "1");
+
+                    //catalog.FileSave(StringResources.getCatalogsPath() + "\\@tx_pal.cat");
+                    MessageBox.Show(catalog.TableGetLine(CatalogEnum.TableId.TEXTURES, 0, textureIndex));
+                    //n++;
+                    //nextTextureKey++; 
+                }
+                if (catalog.FileSave(StringResources.getCatalogsPath() + "\\@tx_pal.cat"))
+                {
+                    //MessageBox.Show("File Saved");
+                }
+                else MessageBox.Show("File dont saved");
+                registerTextures(facades.Keys);
+                updateGraphics();
+
+                //MessageBox.Show(count.ToString());
+                //catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, n, 0, (n+1).ToString());
+                //catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, n, 1, "New Texture");
+                //catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, n, 3, "images\\new.jpg");
+                //catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, n, 4, "1521");
+                //catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, n, 5, "651");
+                //catalog.FileSave("C:\\InSitu\\Catalogs\\@tx_pal.cat");
+                //n++;
+
+
+                //for (int i = 0; i < n; i++)
+                //{                    
+                //    MessageBox.Show(catalog.TableGetLine(CatalogEnum.TableId.TEXTURES, 0, i));
+                //}
+
+            }
+            else
+            {
+                MessageBox.Show("SomethingWrong");
+            }
+        }
     }
 }

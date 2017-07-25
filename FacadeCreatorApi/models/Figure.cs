@@ -33,6 +33,7 @@ namespace FacadeCreatorApi.models
         public int height { get; set; }
 
         float resolution;
+
         public Figure(int width, int height)
         {
             this.width = width;
@@ -95,6 +96,7 @@ namespace FacadeCreatorApi.models
             }
 
         }
+        public float getResolution() { return resolution; }
         internal void Scale(int x, int y)
         {
             switch (currentAction)
