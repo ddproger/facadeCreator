@@ -96,6 +96,8 @@ namespace FacadeCreatorApi
         private ContextMenuStrip createMenuFigure()
         {
             LinkedList<Services.MenuItem> menuItems = new LinkedList<Services.MenuItem>();
+           
+
             menuItems.AddLast(new MenuItemImpl("mnuDelete", "Удалить", null, mhuDeleteFigure_Click));
             menuItems.AddLast(new MenuItemImpl("mnuPosition", "Положение", null, null));
             menuItems.AddLast(new MenuItemImpl("mnuEditImage", "Эффекты", null, null));
@@ -103,13 +105,33 @@ namespace FacadeCreatorApi
             menuItems.AddLast(new MenuItemImpl("mnuGetProperty", "Свойства", null, canvas_double_click));
 
             ContextMenuBuilder menuBuilder = new ContextMenuBuilder(menuItems);
-            menuBuilder.addToExistingStrip("mnuEditImage", new MenuItemImpl("mnuInverse", "Инвертировать", null, mnuInversion_Click));
-
             menuBuilder.addToExistingStrip("mnuPosition", new MenuItemImpl("mnuLevelUp", "На уровень вышe", null, mnuUp_Click));
             menuBuilder.addToExistingStrip("mnuPosition", new MenuItemImpl("mnuLevelUp", "На уровень ниже", null, mnuLower_Click));
-            menuBuilder.addToExistingStrip("mnuPosition", new MenuItemImpl("mnuLevelUp", " передний план", null, mnuToFrontClick));
+            menuBuilder.addToExistingStrip("mnuPosition", new MenuItemImpl("mnuLevelUp", "На передний план", null, mnuToFrontClick));
             menuBuilder.addToExistingStrip("mnuPosition", new MenuItemImpl("mnuLevelUp", "На задний план", null, mnuToBack_Click));
+
+            menuBuilder.addToExistingStrip("mnuEditImage", new MenuItemImpl("mnuInverse", "Инвертировать", null, mnuInversion_Click));
+            menuBuilder.addToExistingStrip("mnuEditImage", new MenuItemImpl("mnuMirror", "Отзеркалить", null, null));
+            menuBuilder.addToExistingStrip("mnuMirror", new MenuItemImpl("mnuMirrorHorizontal", "По горизонтали", null, mnuMirrorHorizontal_Click));
+            menuBuilder.addToExistingStrip("mnuMirror", new MenuItemImpl("mnuMirrorVertical", "По вертикали", null, mnuMirrorVertical_Click));
+
             return menuBuilder.getContext();
+        }
+
+        private void mnuMirrorVertical_Click(object sender, EventArgs e)
+        {
+            if(selectedFigure!=null&&selectedFigure.figure is BkgImage)
+            {
+                ((BkgImage)selectedFigure.figure).mirrorVertical();
+            }
+        }
+
+        private void mnuMirrorHorizontal_Click(object sender, EventArgs e)
+        {
+            if (selectedFigure != null && selectedFigure.figure is BkgImage)
+            {
+                ((BkgImage)selectedFigure.figure).mirrorHorizontal();
+            }
         }
 
         #endregion

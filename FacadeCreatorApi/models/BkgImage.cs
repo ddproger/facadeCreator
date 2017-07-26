@@ -64,5 +64,15 @@ namespace FacadeCreatorApi.models
         {
             img = ImageConversion.inverseBlackWhiteImage(img);
         }
+
+        internal void mirrorHorizontal()
+        {
+            img.RotateFlip(RotateFlipType.RotateNoneFlipY);
+        }
+
+        internal void mirrorVertical()
+        {
+            img.RotateFlip(RotateFlipType.RotateNoneFlipX);
+        }
     }
 }

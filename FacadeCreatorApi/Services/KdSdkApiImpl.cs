@@ -8,6 +8,11 @@ namespace FacadeCreatorApi.Services
 {
     public class KdSdkApiImpl : KdSdkApi
     {
+        enum TextureType
+        {
+            Sandblast,
+            Photo
+        }
         Appli _appli;
         Scene _scene;
         int iParamsBlock;
