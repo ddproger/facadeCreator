@@ -22,7 +22,8 @@ namespace FacadeCreatorApi
 
         KdSdkApi kdApi;
         Control canvas;
-        ContextMenuStrip mnuFigure;
+        ContextMenuStrip mnuBkgImage;
+        ContextMenuStrip mnuFacade;
         ContextMenuStrip mnuCanvas;
 
         FiguresCollection bkgImages;
@@ -40,6 +41,8 @@ namespace FacadeCreatorApi
         bool cntrEnabled = false;
         bool isMouseDown = false;
         bool canMovedFacadeMode = false;
+
+
         public Scenes(Control canvas, KdSdkApi kdApi)
         {
             this.canvas = canvas;
@@ -54,7 +57,8 @@ namespace FacadeCreatorApi
             //addFigure(new Facade(3,100, 150), 340, 5);      
 
 
-            mnuFigure = createMenuFigure();
+            mnuBkgImage = createMenuBkgImage();
+            mnuFacade = createMenuFacade();
             mnuCanvas = createMenuCanvas();
 
             canvas.MouseDown += new MouseEventHandler(mouseDown);
@@ -93,7 +97,7 @@ namespace FacadeCreatorApi
             ContextMenuBuilder menuBuilder = new ContextMenuBuilder(menuItems);
             return menuBuilder.getContext();
         }
-        private ContextMenuStrip createMenuFigure()
+        private ContextMenuStrip createMenuBkgImage()
         {
             LinkedList<Services.MenuItem> menuItems = new LinkedList<Services.MenuItem>();
            
@@ -117,26 +121,37 @@ namespace FacadeCreatorApi
 
             return menuBuilder.getContext();
         }
+        private ContextMenuStrip createMenuFacade()
+        {
+            LinkedList<Services.MenuItem> menuItems = new LinkedList<Services.MenuItem>();
 
+
+            menuItems.AddLast(new MenuItemImpl("mnuDelete", "Удалить", null, mhuDeleteFigure_Click));
+            //menuItems.AddLast(new MenuItemImpl("mnuGetProperty", "Свойства", null, canvas_double_click));
+
+            ContextMenuBuilder menuBuilder = new ContextMenuBuilder(menuItems);
+
+            return menuBuilder.getContext();
+        }
+        #endregion
+
+        #region Event Listener methods
         private void mnuMirrorVertical_Click(object sender, EventArgs e)
         {
-            if(selectedFigure!=null&&selectedFigure.figure is BkgImage)
+            if (selectedFigure != null && selectedFigure.figure is BkgImage)
             {
                 ((BkgImage)selectedFigure.figure).mirrorVertical();
+                UpdateGraphics();
             }
         }
-
         private void mnuMirrorHorizontal_Click(object sender, EventArgs e)
         {
             if (selectedFigure != null && selectedFigure.figure is BkgImage)
             {
                 ((BkgImage)selectedFigure.figure).mirrorHorizontal();
+                UpdateGraphics();
             }
         }
-
-        #endregion
-
-        #region Event Listener methods
         private void mnuInversion_Click(object sender, EventArgs e)
         {
             if (selectedFigure != null && selectedFigure.figure is BkgImage)
@@ -286,8 +301,8 @@ namespace FacadeCreatorApi
         private void mouseUp(object sender, MouseEventArgs e)
         {
             if (selectedFigure != null)
-            {
-                selectedFigure.figure.updateResolution();
+            {                   
+                    selectedFigure.figure.updateResolution();
             }
             isMouseDown = false;
             UpdateGraphics();
@@ -297,7 +312,7 @@ namespace FacadeCreatorApi
         {
             if (selectedFigure != null)
             {
-                canvas.ContextMenuStrip = mnuFigure;
+                
                 //Figure fig = selectedFigure.figure;
                 if (isMouseDown)
                 {
@@ -359,9 +374,12 @@ namespace FacadeCreatorApi
 
         private void mouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            if (e.Button == MouseButtons.Right&&selectedFigure!=null)
             {
-
+                if (selectedFigure.figure is BkgImage)
+                    canvas.ContextMenuStrip = mnuBkgImage;
+                else if (selectedFigure.figure is Facade)
+                    canvas.ContextMenuStrip = mnuFacade;
             }
             if (e.Button != MouseButtons.Left) return;
             clickPoint = transformCoordinate(e.X, e.Y);
@@ -410,7 +428,7 @@ namespace FacadeCreatorApi
                     return;
                 }
             }
-
+            canvas.ContextMenuStrip = mnuCanvas;
             unselectFigure();
 
         }
