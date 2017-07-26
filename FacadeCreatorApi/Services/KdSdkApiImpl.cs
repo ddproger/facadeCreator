@@ -179,8 +179,8 @@ namespace FacadeCreatorApi.Services
                     }
                     strWidth = catalog.TableGetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 4);
                     Int32.TryParse(strWidth, out oldWidth);
-                    if (oldWidth > item.Key.width) newWidth = item.Key.width;
-                    else newWidth = oldWidth+1;
+                    if (oldWidth != item.Key.width) newWidth = item.Key.width;
+                    else newWidth = oldWidth + 1;
                     //MessageBox.Show("edit "+ textureIndex + " line, with "+ TextureKey + " kod");
                     catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 0, TextureKey.ToString());
                     catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 1, project+item.Key.getNumber() + rand.Next(1,10));
@@ -188,6 +188,14 @@ namespace FacadeCreatorApi.Services
                     catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 4, newWidth.ToString());
                     catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 5, item.Key.height.ToString());
                     //catalog.FileSave(StringResources.getCatalogsPath() + "\\@tx_pal.cat");
+
+                    catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 10, "");
+                    catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 11, "0");
+                    catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 12, "0");
+                    catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 13, "0.2");
+                    catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 15, "0.2");
+                    catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 16, "0");
+
                     MessageBox.Show(catalog.TableGetLine(CatalogEnum.TableId.TEXTURES, 0, textureIndex));
                     //n++;
                     //nextTextureKey++; 
@@ -283,9 +291,9 @@ namespace FacadeCreatorApi.Services
                         }
                         item.Key.setTextureId(TextureKey);
                     }
-                    strWidth = catalog.TableGetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 4);
+                    strWidth = catalog.TableGetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 11);
                     Int32.TryParse(strWidth, out oldWidth);
-                    if (oldWidth > item.Key.width) newWidth = item.Key.width;
+                    if (oldWidth != item.Key.width) newWidth = item.Key.width;
                     else newWidth = oldWidth + 1;
                     //MessageBox.Show("edit "+ textureIndex + " line, with "+ TextureKey + " kod");
                     catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 0, TextureKey.ToString());
