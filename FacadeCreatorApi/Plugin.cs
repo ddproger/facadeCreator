@@ -3,6 +3,8 @@ using FacadeCreatorApi.models;
 using FacadeCreatorApi.Services;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -33,6 +35,16 @@ namespace FacadeCreatorApi
             KdSdkApiImpl kdApi = new KdSdkApiImpl(iCallParamsBlock);
             //kdApi.updatePalitra();
             AddMenu(iCallParamsBlock);
+            String path = StringResources.getResourcesPath();
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            if (!File.Exists(path + "\\gray.jpg"))
+            {
+                ImageConversion.createBackgroundImage(path + "\\gray.jpg");
+
+            }
             return true;
         }
         public bool OnPluginUnload(int lCallParamBlock)
@@ -96,10 +108,7 @@ namespace FacadeCreatorApi
                 MessageBox.Show("Not selected item mathed, check your elements property");
                 return false;
             }
-            String path = StringResources.getResourcesPath();
-            if (!Directory.Exists(path)){
-                Directory.CreateDirectory(path);
-            }
+            
             scenes.scalingToAllFigureisVisibleMode();
             frm.ShowDialog();
             return true;

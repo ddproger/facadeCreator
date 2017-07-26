@@ -17,13 +17,18 @@ namespace FacadeCreator
     {
         public Form1()
         {
-            InitializeComponent();            
-            Scenes scenes = new Scenes(this,null);
+            InitializeComponent();
+            Scenes scenes = new Scenes(this, null);
             scenes.addFigure(new Facade(1, 1, 600, 2200), 0, 0);
-            scenes.addFigure(new BkgImage(new Bitmap("C:\\InSitu\\Textures\\images\\image44.jpg")), 0, 0);
+            scenes.addFigure(new Facade(1, 1, 600, 2200), 700, 0);
+            scenes.addFigure(new BkgImage(new Bitmap("C:\\InSitu\\Textures\\images\\595E677B_0002_01162.jpg")), 0, 0);
+            scenes.addFigure(new BkgImage(new Bitmap("C:\\InSitu\\Textures\\images\\595E677B_0002_01162.jpg")), 700, 0);
         }
         private void update(object sender, PaintEventArgs e)
         {
+            //Graphics graph = e.Graphics;
+            //Image img = ImageConversion.inverseBlackWhiteImage(new Bitmap("C:\\InSitu\\Textures\\images\\595E677B_0002_01162.jpg"));
+            //graph.DrawImage(img, new Point(0, 0));
             //Graphics graphics = this.CreateGraphics();
             //Pen pen = new Pen(Color.Black, 3);
             //graphics.ScaleTransform(2, 2);           

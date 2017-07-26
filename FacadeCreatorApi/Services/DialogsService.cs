@@ -13,8 +13,8 @@ namespace FacadeCreatorApi.Services
     [ComVisible(false)]
     public class DialogsService
     {
-        public static Image getImageFromDisk(string currentPath) {
-            Image image = null;
+        public static Bitmap getImageFromDisk(string currentPath) {
+            Bitmap image = null;
             Stream myStream = null;
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
 

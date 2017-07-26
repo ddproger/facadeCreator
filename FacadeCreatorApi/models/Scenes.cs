@@ -32,7 +32,7 @@ namespace FacadeCreatorApi
 
         private Point clickPoint = new Point();
         private Point mousePosition = new Point();
-        private Image pastingImage;
+        private Bitmap pastingImage;
         private Point absoluteClickPoint;
         int offsetX, offsetY;
         float scale = 1;
@@ -85,22 +85,26 @@ namespace FacadeCreatorApi
             menuItems.AddLast(new MenuItemImpl("mnuClearImages", "Очистить сцену", null, mnuClearImages_Click));
             menuItems.AddLast(new MenuItemImpl("mnuEnableEditPosition", "Редактировать положение фасадов", null, mnuEnableEditPosition_Click));
             menuItems.AddLast(new MenuItemImpl("mnuPaste", "Вставить", null, mnuPaste_Click));
+
+            menuItems.AddLast(new MenuItemImpl("mnuFillFacades", "Обрезать", null, mnuFillFacades_Click));
             menuItems.AddLast(new MenuItemImpl("mnuCreateHowPhotoFacade", "Создать как фото фасады", null, mnuCreateHowPhotoFacade_Click));
             menuItems.AddLast(new MenuItemImpl("mnuCreateHowSandblast", "Создать как пескоструйные фасады", null, mnuCreateHowSandblast_Click));
+
             ContextMenuBuilder menuBuilder = new ContextMenuBuilder(menuItems);
             return menuBuilder.getContext();
         }
-
-
         private ContextMenuStrip createMenuFigure()
         {
             LinkedList<Services.MenuItem> menuItems = new LinkedList<Services.MenuItem>();
             menuItems.AddLast(new MenuItemImpl("mnuDelete", "Удалить", null, mhuDeleteFigure_Click));
             menuItems.AddLast(new MenuItemImpl("mnuPosition", "Положение", null, null));
+            menuItems.AddLast(new MenuItemImpl("mnuEditImage", "Эффекты", null, null));
             menuItems.AddLast(new MenuItemImpl("mnuCopy", "Копировать", null, mnuCopy_Click));
             menuItems.AddLast(new MenuItemImpl("mnuGetProperty", "Свойства", null, canvas_double_click));
 
             ContextMenuBuilder menuBuilder = new ContextMenuBuilder(menuItems);
+            menuBuilder.addToExistingStrip("mnuEditImage", new MenuItemImpl("mnuInverse", "Инвертировать", null, mnuInversion_Click));
+
             menuBuilder.addToExistingStrip("mnuPosition", new MenuItemImpl("mnuLevelUp", "На уровень вышe", null, mnuUp_Click));
             menuBuilder.addToExistingStrip("mnuPosition", new MenuItemImpl("mnuLevelUp", "На уровень ниже", null, mnuLower_Click));
             menuBuilder.addToExistingStrip("mnuPosition", new MenuItemImpl("mnuLevelUp", " передний план", null, mnuToFrontClick));
@@ -108,11 +112,18 @@ namespace FacadeCreatorApi
             return menuBuilder.getContext();
         }
 
-
         #endregion
 
         #region Event Listener methods
-
+        private void mnuInversion_Click(object sender, EventArgs e)
+        {
+            if (selectedFigure != null && selectedFigure.figure is BkgImage)
+            {
+                BkgImage image = (BkgImage)selectedFigure.figure;
+                image.inverse();
+                UpdateGraphics();
+            }
+        }
         private void canvas_double_click(object sender, EventArgs e)
         {
             if (selectedFigure != null && !(selectedFigure.figure is Facade))
@@ -381,6 +392,31 @@ namespace FacadeCreatorApi
             unselectFigure();
 
         }
+        private void mnuFillFacades_Click(object sender, EventArgs e)
+        {
+            Rectangle areaSize = new Rectangle();
+            try
+            {
+                areaSize = getBordersOfCanvas();
+                Bitmap image = generateFullGrapics(areaSize);
+                bkgImages.removeAll();
+
+                foreach (FigureOnBoard item in facades)
+                {
+                    Bitmap img = new Bitmap(item.figure.width,item.figure.height);
+                    using (Graphics gp = Graphics.FromImage(img))
+                    {
+                        gp.DrawImage(image, new Rectangle(0, 0, img.Width, img.Height), new Rectangle(item.x - areaSize.X, item.y - areaSize.Y, img.Width, img.Height), GraphicsUnit.Pixel);
+                        bkgImages.add(new FigureOnBoard(new BkgImage(img), item.x,item.y));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(areaSize.ToString());
+            }
+            UpdateGraphics();
+        }
         private void mnuCreateHowSandblast_Click(object sender, EventArgs e)
         {
             Rectangle areaSize = new Rectangle();
@@ -399,7 +435,7 @@ namespace FacadeCreatorApi
         }
         private void mnuAddImage_Click(object sender, EventArgs e)
         {
-            Image newImage = DialogsService.getImageFromDisk("c:\\");
+            Bitmap newImage = DialogsService.getImageFromDisk("c:\\");
             if (newImage != null)
             {
                 pastingImage = newImage;

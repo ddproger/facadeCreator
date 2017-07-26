@@ -12,7 +12,6 @@ namespace FacadeCreatorApi.models
     [ComVisible(false)]
     public class Facade : Figure
     {
-        
         int number=0;
         int textureNumber = 0;
         private Font currentFont;

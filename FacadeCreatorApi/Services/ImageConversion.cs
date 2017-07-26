@@ -49,5 +49,36 @@ namespace FacadeCreatorApi.Services
             }
             return facades;
         }
+
+        public static void createBackgroundImage(string path)
+        {
+            Image image = new Bitmap(100, 100);
+            Graphics graph = Graphics.FromImage(image);
+            graph.FillRectangle(Brushes.LightGray, 0, 0, 100, 100);
+
+            //graph.Clear(Color.FromArgb(0, 178, 178, 178));
+            //graph.Save();
+            image.Save(path);
+        }
+        public static Bitmap inverseBlackWhiteImage(Bitmap oldImage)
+        {
+            Bitmap newImage = new Bitmap(oldImage.Width, oldImage.Height);
+            Graphics newGraphics = Graphics.FromImage(newImage);
+            int width = oldImage.Width;
+            int height = oldImage.Height;
+            int R, G, B;
+            newGraphics.FillRectangle(Brushes.Black, 0, 0, width, height);
+            Color color;
+            for (int i = 0; i < width; i++)
+                for (int j = 0; j < height; j++)
+                {
+                    color = oldImage.GetPixel(i, j);
+                    if (color.R < 128 && color.G < 128 && color.B < 128)
+                    {
+                        newImage.SetPixel(i, j, Color.White);
+                    }
+                }
+            return newImage;
+        }
     }
 }

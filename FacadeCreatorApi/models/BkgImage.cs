@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FacadeCreatorApi.Services;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -12,8 +13,8 @@ namespace FacadeCreatorApi.models
     [ComVisible(false)]
     public class BkgImage : Figure
     {
-        private Image img;
-        public BkgImage(Image img) : base(img.Width, img.Height)
+        private Bitmap img;
+        public BkgImage(Bitmap img) : base(img.Width, img.Height)
         {
             this.img = img;
             updateResolution();
@@ -58,6 +59,10 @@ namespace FacadeCreatorApi.models
             else currentAction = action;
             return currentAction;
         }
-        
+
+        internal void inverse()
+        {
+            img = ImageConversion.inverseBlackWhiteImage(img);
+        }
     }
 }
