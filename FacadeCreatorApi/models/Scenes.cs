@@ -118,9 +118,29 @@ namespace FacadeCreatorApi
             menuBuilder.addToExistingStrip("mnuEditImage", new MenuItemImpl("mnuMirror", "Отзеркалить", null, null));
             menuBuilder.addToExistingStrip("mnuMirror", new MenuItemImpl("mnuMirrorHorizontal", "По горизонтали", null, mnuMirrorHorizontal_Click));
             menuBuilder.addToExistingStrip("mnuMirror", new MenuItemImpl("mnuMirrorVertical", "По вертикали", null, mnuMirrorVertical_Click));
+            menuBuilder.addToExistingStrip("mnuEditImage", new MenuItemImpl("mnuRotate", "Повернуть", null, null));
+            menuBuilder.addToExistingStrip("mnuRotate", new MenuItemImpl("mnuRotateClockwise", "По часовой", null, mnuRotateClockwise_Click));
+            menuBuilder.addToExistingStrip("mnuRotate", new MenuItemImpl("mnuRotateCounter-Clockwise", "Против часовой", null, mnuRotateCounter_Clockwise_Click));
+
 
             return menuBuilder.getContext();
         }
+
+        private void mnuRotateCounter_Clockwise_Click(object sender, EventArgs e)
+        {
+            if(selectedFigure!=null&selectedFigure.figure is BkgImage)
+            {
+                ((BkgImage)selectedFigure.figure).rotate(BkgImage.RotateType.Counter_Clockwise);
+                UpdateGraphics();
+            }
+        }
+
+        private void mnuRotateClockwise_Click(object sender, EventArgs e)
+        {
+            ((BkgImage)selectedFigure.figure).rotate(BkgImage.RotateType.Clockwise);
+            UpdateGraphics();
+        }
+
         private ContextMenuStrip createMenuFacade()
         {
             LinkedList<Services.MenuItem> menuItems = new LinkedList<Services.MenuItem>();

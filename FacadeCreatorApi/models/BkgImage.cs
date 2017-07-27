@@ -74,5 +74,27 @@ namespace FacadeCreatorApi.models
         {
             img.RotateFlip(RotateFlipType.RotateNoneFlipX);
         }
+        public void rotate(RotateType type)
+        {
+            RotateFlipType rotateFlipType = RotateFlipType.RotateNoneFlipNone;
+            switch (type)
+            {
+                case RotateType.Clockwise:
+                    rotateFlipType = RotateFlipType.Rotate90FlipNone;
+                    break;
+                case RotateType.Counter_Clockwise:
+                    rotateFlipType = RotateFlipType.Rotate270FlipNone;
+                    break;
+            }
+            int tmp = width;
+            width = height;
+            height = tmp;
+            img.RotateFlip(rotateFlipType);
+        }
+        public enum RotateType
+        {
+            Clockwise,
+            Counter_Clockwise
+        }
     }
 }
