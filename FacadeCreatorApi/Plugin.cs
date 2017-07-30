@@ -97,15 +97,25 @@ namespace FacadeCreatorApi
             
             foreach (FigureOnBoard item in facades)
             {
-                if(item.figure.width==0||item.figure.height ==0)
+                if (item.figure.width == 0 || item.figure.height == 0)
                 {
-                    MessageBox.Show("Element with id:"+item.figure+" have one or more zero parameters");
-                }else scenes.addFigure(item.figure, item.x, item.y);
+                    MessageBox.Show("Element with id:" + item.figure + " have one or more zero parameters");
+                }
+                else
+                {
+                    string path = kdApi.getImagePathFromTexture(((Facade)item.figure).getTextureId());
+                    MessageBox.Show(path);
+                    if (!path.Equals("")&&File.Exists(path))
+                    {
+                        scenes.addFigure(new BkgImage(new Bitmap(path)), item.x, item.y);
+                    }
+                    scenes.addFigure(item.figure, item.x, item.y);
+                }
             }
             //scenes.addFigure(new Facade(21, 100, 100), 0, 0);
             if (facades.Count < 1)
             {
-                MessageBox.Show("Not selected item mathed, check your elements property");
+                MessageBox.Show("Объекты с атрибутом по свойству 1 не выбраны");
                 return false;
             }
             

@@ -168,7 +168,7 @@ namespace FacadeCreatorApi.Services
                     {
                         textureIndex = catalog.TableGetLineRankFromCode(CatalogEnum.TableId.TEXTURES,0,0,item.Key.getTextureId().ToString(),false);
                         TextureKey = item.Key.getTextureId();
-                        MessageBox.Show("texture index = " + textureIndex);
+                        //MessageBox.Show("texture index = " + textureIndex);
                     }
                     else
                     {
@@ -201,7 +201,7 @@ namespace FacadeCreatorApi.Services
                     catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 15, "0.2");
                     catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 16, "0");
 
-                    MessageBox.Show(catalog.TableGetLine(CatalogEnum.TableId.TEXTURES, 0, textureIndex));
+                    //MessageBox.Show(catalog.TableGetLine(CatalogEnum.TableId.TEXTURES, 0, textureIndex));
                     //n++;
                     //nextTextureKey++; 
                 }
@@ -241,7 +241,7 @@ namespace FacadeCreatorApi.Services
                 //MessageBox.Show(textureString);
                 if(_scene.ObjectSetInfo(item.getNumber(), textureString, SceneEnum.ObjectInfo.TEXTURE))
                 {
-                    MessageBox.Show("Saved texture to file");
+                   // MessageBox.Show("Saved texture to file");
                 }
             }
         }
@@ -282,7 +282,7 @@ namespace FacadeCreatorApi.Services
                     {
                         textureIndex = catalog.TableGetLineRankFromCode(CatalogEnum.TableId.TEXTURES, 0, 0, item.Key.getTextureId().ToString(), false);
                         TextureKey = item.Key.getTextureId();
-                        MessageBox.Show("texture index = " + textureIndex);
+                       // MessageBox.Show("texture index = " + textureIndex);
                     }
                     else
                     {
@@ -303,7 +303,7 @@ namespace FacadeCreatorApi.Services
                     //MessageBox.Show("edit "+ textureIndex + " line, with "+ TextureKey + " kod");
                     catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 0, TextureKey.ToString());
                     catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 1, project + item.Key.getNumber() + rand.Next(1, 10));
-                    catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 3, StringResources.getResourcePathWithoutAbsolute()+"\\gray.jpg");
+                    catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 3, StringResources.getImageDirectoryName()+"\\gray.jpg");
 
                     catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 4, "0");
                     catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 5, "0");
@@ -316,7 +316,7 @@ namespace FacadeCreatorApi.Services
                     catalog.TableSetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 16, "1");
 
                     //catalog.FileSave(StringResources.getCatalogsPath() + "\\@tx_pal.cat");
-                    MessageBox.Show(catalog.TableGetLine(CatalogEnum.TableId.TEXTURES, 0, textureIndex));
+                    //MessageBox.Show(catalog.TableGetLine(CatalogEnum.TableId.TEXTURES, 0, textureIndex));
                     //n++;
                     //nextTextureKey++; 
                 }
@@ -348,6 +348,34 @@ namespace FacadeCreatorApi.Services
             {
                 MessageBox.Show("SomethingWrong");
             }
+        }
+        public string getImagePathFromTexture(int id)
+        {
+            KD.SDK.Catalog catalog = _appli.Catalog;
+
+            catalog.SessionId = _appli.StartSessionFromCallParams(iParamsBlock);
+            if (catalog.FileLoad(StringResources.getCatalogsPath() + "\\@tx_pal.cat", ""))
+            {
+
+                String project = _scene.SceneGetInfo(SceneEnum.SceneInfo.NAME);
+                //MessageBox.Show("isLoad=" + catalog.IsLoaded() + " " + catalog.GetInfo(CatalogEnum.InfoId.FILENAME));
+
+                int textureIndex = catalog.TableGetLineRankFromCode(CatalogEnum.TableId.TEXTURES, 0, 0, id.ToString(), false);
+                MessageBox.Show(catalog.TableGetLine(CatalogEnum.TableId.TEXTURES, 0, textureIndex));
+                string sandblandPath = catalog.TableGetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 10);
+                string photoPath = catalog.TableGetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 3);
+                string pathToTextures = StringResources.getResourcesPath();
+                MessageBox.Show(sandblandPath);
+                if (!sandblandPath.Equals(""))
+                {
+                    return pathToTextures + "\\" + sandblandPath;
+                }
+                else if(!photoPath.Equals(""))
+                {
+                    return pathToTextures + "\\" + photoPath;
+                }
+            }
+            return "";
         }
     }
 }

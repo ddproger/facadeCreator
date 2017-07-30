@@ -10,5 +10,6 @@ namespace FacadeCreatorApi.Services
         ICollection<FigureOnBoard> getFacades();
         string getScenesName();
         void applyFacadeImageHowSandblast(IDictionary<Facade, string> facades);
+        string getImagePathFromTexture(int id);
     }
 }

@@ -33,9 +33,9 @@ namespace FacadeCreatorApi.Services
         }
         public static string getResourcesPath()
         {
-            return getAbsolutePath()+"\\Textures\\images";   
+            return getAbsolutePath()+"\\Textures";   
         }
-        public static string getResourcePathWithoutAbsolute()
+        public static string getImageDirectoryName()
         {
             return "images";
         }

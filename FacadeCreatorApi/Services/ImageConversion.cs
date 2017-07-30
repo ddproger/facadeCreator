@@ -24,9 +24,9 @@ namespace FacadeCreatorApi.Services
                     img = new Bitmap(item.figure.width, item.figure.height);
                     using(Graphics gp = Graphics.FromImage(img))
                     {
-                        alternativeName = StringResources.getResourcePathWithoutAbsolute() + "\\" + scenesName + item.figure.ToString() + ".jpg";
-                        pathToImage = StringResources.getResourcesPath()+ "\\"+ scenesName + item.figure.ToString() + ".jpg";
-                            MessageBox.Show(pathToImage);
+                        alternativeName = StringResources.getImageDirectoryName() + "\\" + scenesName + item.figure.ToString() + ".jpg";
+                        pathToImage = StringResources.getResourcesPath()+"\\"+ StringResources.getImageDirectoryName() + "\\"+ scenesName + item.figure.ToString() + ".jpg";
+                            //MessageBox.Show(pathToImage);
                         try
                         {
                             gp.DrawImage(image, new Rectangle(0, 0, img.Width, img.Height), new Rectangle(item.x - areaSize.X, item.y - areaSize.Y, img.Width, img.Height), GraphicsUnit.Pixel);

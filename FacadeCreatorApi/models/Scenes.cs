@@ -670,10 +670,10 @@ namespace FacadeCreatorApi
                 
                 offsetX -= (int)(((mousePosition.X * SCALE_STEP) ) + 0.5);
                 offsetY -= (int)(((mousePosition.Y * SCALE_STEP) ) + 0.5);
-                Console.WriteLine("MouseX=" + mousePosition.X + " mouseY=" + mousePosition.Y);
-                Console.WriteLine("resultX=" + (int)(((mousePosition.X * SCALE_STEP) / scale) + 0.5));
-                Console.WriteLine("resultY=" + (int)(((mousePosition.Y * SCALE_STEP) / scale) + 0.5));
-                Console.WriteLine("scale=" + scale);
+                //Console.WriteLine("MouseX=" + mousePosition.X + " mouseY=" + mousePosition.Y);
+                //Console.WriteLine("resultX=" + (int)(((mousePosition.X * SCALE_STEP) / scale) + 0.5));
+                //Console.WriteLine("resultY=" + (int)(((mousePosition.Y * SCALE_STEP) / scale) + 0.5));
+                //Console.WriteLine("scale=" + scale);
 
             }
         }
