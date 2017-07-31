@@ -151,9 +151,7 @@ namespace FacadeCreatorApi.Services
                 
                 String project = _scene.SceneGetInfo(SceneEnum.SceneInfo.NAME);
                 //MessageBox.Show("isLoad=" + catalog.IsLoaded() + " " + catalog.GetInfo(CatalogEnum.InfoId.FILENAME));
-                int n = catalog.TableGetLinesNb(CatalogEnum.TableId.TEXTURES,0);
-                catalog.TableAddLines(CatalogEnum.TableId.TEXTURES, 0, 1);
-                catalog.TableDeleteLines(CatalogEnum.TableId.TEXTURES, 0, n, 1);
+                int n = catalog.TableGetLinesNb(CatalogEnum.TableId.TEXTURES, 0);
                 int textureIndex = 0;
                 int TextureKey;
 
@@ -266,8 +264,7 @@ namespace FacadeCreatorApi.Services
                 String project = _scene.SceneGetInfo(SceneEnum.SceneInfo.NAME);
                 //MessageBox.Show("isLoad=" + catalog.IsLoaded() + " " + catalog.GetInfo(CatalogEnum.InfoId.FILENAME));
                 int n = catalog.TableGetLinesNb(CatalogEnum.TableId.TEXTURES, 0);
-                catalog.TableAddLines(CatalogEnum.TableId.TEXTURES, 0, 1);
-                catalog.TableDeleteLines(CatalogEnum.TableId.TEXTURES, 0, n, 1);
+               
                 int textureIndex = 0;
                 int TextureKey;
 
@@ -361,11 +358,11 @@ namespace FacadeCreatorApi.Services
                 //MessageBox.Show("isLoad=" + catalog.IsLoaded() + " " + catalog.GetInfo(CatalogEnum.InfoId.FILENAME));
 
                 int textureIndex = catalog.TableGetLineRankFromCode(CatalogEnum.TableId.TEXTURES, 0, 0, id.ToString(), false);
-                MessageBox.Show(catalog.TableGetLine(CatalogEnum.TableId.TEXTURES, 0, textureIndex));
+                //MessageBox.Show(catalog.TableGetLine(CatalogEnum.TableId.TEXTURES, 0, textureIndex));
                 string sandblandPath = catalog.TableGetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 10);
                 string photoPath = catalog.TableGetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 3);
                 string pathToTextures = StringResources.getResourcesPath();
-                MessageBox.Show(sandblandPath);
+                //MessageBox.Show(sandblandPath);
                 if (!sandblandPath.Equals(""))
                 {
                     return pathToTextures + "\\" + sandblandPath;

@@ -21,8 +21,8 @@ namespace FacadeCreator
             Scenes scenes = new Scenes(this, null);
             scenes.addFigure(new Facade(1, 1, 600, 2200), 0, 0);
             scenes.addFigure(new Facade(1, 1, 600, 2200), 700, 0);
-            scenes.addFigure(new BkgImage(new Bitmap("C:\\InSitu\\Textures\\images\\595E677B_0002_01162.jpg")), 0, 0);
-            scenes.addFigure(new BkgImage(new Bitmap("C:\\InSitu\\Textures\\images\\595E677B_0002_01162.jpg")), 700, 0);
+            scenes.addFigure(new BkgImage(ImageConversion.getImage("C:\\InSitu\\Textures\\images\\595E677B_0002_01162.jpg")), 0, 0);
+            scenes.addFigure(new BkgImage(ImageConversion.getImage("C:\\InSitu\\Textures\\images\\595E677B_0002_01162.jpg")), 700, 0);
         }
         private void update(object sender, PaintEventArgs e)
         {
@@ -38,5 +38,9 @@ namespace FacadeCreator
             //graphics.Dispose();
         }
 
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

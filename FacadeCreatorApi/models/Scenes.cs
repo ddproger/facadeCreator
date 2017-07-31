@@ -490,7 +490,7 @@ namespace FacadeCreatorApi
             }
             catch (Exception ex)
             {
-                MessageBox.Show(areaSize.ToString());
+                MessageBox.Show("Не удается сохранить результат!\n" + ex.Message);
             }
         }
         private void mnuAddImage_Click(object sender, EventArgs e)
@@ -513,9 +513,19 @@ namespace FacadeCreatorApi
                 closePlugin();
             }catch(Exception ex)
             {
-                MessageBox.Show(areaSize.ToString());
+                MessageBox.Show("Не удается сохранить результат!\n"+ex.Message);
             }            
         }
+
+        //private void disposeImages()
+        //{
+        //    foreach (FigureOnBoard item in bkgImages)
+        //    {
+        //        ((BkgImage)item.figure).dispose();
+
+        //    }
+        //    bkgImages.removeAll();
+        //}
 
         private void closePlugin()
         {
@@ -586,8 +596,9 @@ namespace FacadeCreatorApi
             //graphics.TranslateTransform(areaSize.X, areaSize.Y);
             graphics.FillRectangle(Brushes.White, 0, 0, areaSize.Width, areaSize.Height);
             foreach (FigureOnBoard item in bkgImages)
-            {
+            {                
                 item.figure.draw(graphics, item.x-areaSize.X, item.y-areaSize.Y);
+                
             }
             //newImage.Save("c:\\images\\fullImage.jpg");
             return newImage;

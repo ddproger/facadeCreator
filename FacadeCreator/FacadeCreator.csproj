@@ -64,6 +64,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -83,6 +84,27 @@
       <Project>{b6cc5e3a-107c-40ed-ba12-7b827866adc9}</Project>
       <Name>FacadeCreatorApi</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\37.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\38.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\39.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\23.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\24.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\27.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

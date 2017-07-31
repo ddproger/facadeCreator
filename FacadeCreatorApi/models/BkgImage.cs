@@ -96,5 +96,10 @@ namespace FacadeCreatorApi.models
             Clockwise,
             Counter_Clockwise
         }
+        public void dispose()
+        {
+            img.Dispose();
+            img = null;
+        }
     }
 }

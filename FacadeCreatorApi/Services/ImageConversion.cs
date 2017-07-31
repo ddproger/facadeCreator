@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -37,11 +38,12 @@ namespace FacadeCreatorApi.Services
                         }
                         try
                         {
+                        //MessageBox.Show(pathToImage);
                             img.Save(pathToImage, ImageFormat.Jpeg);
                         }
-                        catch (Exception)
+                        catch (Exception e)
                         {
-                            throw new System.IO.FileNotFoundException("Cannot Save Image!!");
+                            throw new System.IO.FileNotFoundException("Cannot Save Image!!"+img+"\n"+e.StackTrace);
                         }
                         facades.Add((Facade)item.figure, alternativeName);
                     }
@@ -79,6 +81,22 @@ namespace FacadeCreatorApi.Services
                     }
                 }
             return newImage;
+        }
+        public static Bitmap getImage(String path)
+        {
+            if (!File.Exists(path)) return null;
+            using(Bitmap imageFromDisk = new Bitmap(path)){
+                try
+                {
+                    Bitmap imageInRam = new Bitmap(imageFromDisk.Width, imageFromDisk.Height);
+                    Graphics imageGraphics = Graphics.FromImage(imageInRam);
+                    imageGraphics.DrawImage(imageFromDisk, 0, 0);
+                    
+                    return imageInRam;
+                } catch (Exception){ }
+                
+            }
+            return null;
         }
     }
 }

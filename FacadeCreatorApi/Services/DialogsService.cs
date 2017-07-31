@@ -27,13 +27,14 @@ namespace FacadeCreatorApi.Services
             {
                 try
                 {
-                    if ((myStream = openFileDialog1.OpenFile()) != null)
-                    {
-                        using (myStream)
-                        {
-                            image = new Bitmap(myStream);
-                        }
-                    }
+                    image = ImageConversion.getImage(openFileDialog1.FileName);
+                    //if ((myStream = openFileDialog1.OpenFile()) != null)
+                    //{
+                    //    using (myStream)
+                    //    {
+                    //        image = new Bitmap(myStream);
+                    //    }
+                    //}
                 }
                 catch (Exception ex)
                 {

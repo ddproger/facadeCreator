@@ -89,13 +89,19 @@ namespace FacadeCreatorApi
             try
             {
                 facades = kdApi.getFacades();
-            }catch(Exception e)
+            }
+            catch (ArgumentNullException e)
+            {
+                MessageBox.Show("Объекты с атрибутом по свойству 1 не выбраны");
+                return false;
+            }
+            catch (Exception e)
             {
                 MessageBox.Show(e.Message);
                 return false;
             }
-            
-            foreach (FigureOnBoard item in facades)
+
+                foreach (FigureOnBoard item in facades)
             {
                 if (item.figure.width == 0 || item.figure.height == 0)
                 {
@@ -104,10 +110,11 @@ namespace FacadeCreatorApi
                 else
                 {
                     string path = kdApi.getImagePathFromTexture(((Facade)item.figure).getTextureId());
-                    MessageBox.Show(path);
-                    if (!path.Equals("")&&File.Exists(path))
+                    //MessageBox.Show(path);
+                    if (!path.Equals(""))
                     {
-                        scenes.addFigure(new BkgImage(new Bitmap(path)), item.x, item.y);
+                        Bitmap image = ImageConversion.getImage(path);
+                        scenes.addFigure(new BkgImage(image), item.x, item.y);
                     }
                     scenes.addFigure(item.figure, item.x, item.y);
                 }
