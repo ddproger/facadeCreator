@@ -80,6 +80,11 @@
     <Compile Include="models\Facade.cs" />
     <Compile Include="models\Figure.cs" />
     <Compile Include="models\FigureOnBoard.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\IniFileReader.cs" />
     <Compile Include="Services\KdSdkApi.cs" />
     <Compile Include="models\Scenes.cs" />
@@ -101,6 +106,47 @@
     <EmbeddedResource Include="Forms\PropertyForm.resx">
       <DependentUpon>PropertyForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\addImage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\copy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\invert.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\mirrorHorizontal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\mirrorVertical.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\paste.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\zoomIn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\zoomOut.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\zoomToOriginal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\moveBack.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\moveForward.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

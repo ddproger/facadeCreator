@@ -58,18 +58,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -86,25 +86,25 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\1.bmp" />
+    <None Include="Resources\371.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\37.bmp" />
+    <None Include="Resources\11.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\38.bmp" />
+    <None Include="Resources\231.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\39.bmp" />
+    <None Include="Resources\241.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\23.bmp" />
+    <None Include="Resources\271.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\24.bmp" />
+    <None Include="Resources\381.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\27.bmp" />
+    <None Include="Resources\391.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

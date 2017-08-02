@@ -18,8 +18,25 @@ namespace FacadeCreatorApi
         private const float MAX_ZOOM = 3;
         private const int SHIFT_STEP = 5;
         private const int ARRAY_SIZE_STEP = 10;
-        private const float SCALE_STEP = 0.1f;
-
+        private const float SCALE_STEP = 0.05f;
+        #region menuStrips
+        System.Windows.Forms.ToolStrip mainToolStrip;
+        System.Windows.Forms.ToolStripButton btnAddImage;
+        System.Windows.Forms.ToolStripButton btnCopy;
+        System.Windows.Forms.ToolStripButton btnPaste;
+        System.Windows.Forms.ToolStripButton btnDelete;
+        System.Windows.Forms.ToolStripButton btnZoomIn;
+        System.Windows.Forms.ToolStripButton btnZoomOut;
+        System.Windows.Forms.ToolStripButton btnZoomOriginal;
+        System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        System.Windows.Forms.ToolStripButton btnInverse;
+        System.Windows.Forms.ToolStripButton btnMirrorVertical;
+        System.Windows.Forms.ToolStripButton btnMirrorHorizontal;
+        System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        System.Windows.Forms.ToolStripButton btnMoveBack;
+        System.Windows.Forms.ToolStripButton btnMoveFront;
+        #endregion
         KdSdkApi kdApi;
         Control canvas;
         ContextMenuStrip mnuBkgImage;
@@ -69,7 +86,7 @@ namespace FacadeCreatorApi
             canvas.KeyUp += new KeyEventHandler(keyUp);
             canvas.Paint += new PaintEventHandler(paint);
             canvas.DoubleClick += new EventHandler(canvas_double_click);
-
+            addMenu();
             //FiguresCollection col = new FiguresCollectionImpl();
             //col.add(new FigureOnBoard(new Facade(1,10, 20), 12, 21));
             //col.add(new FigureOnBoard(new Facade(2,10, 30), 12, 22));
@@ -80,7 +97,206 @@ namespace FacadeCreatorApi
             //}
         }
 
+        private void addMenu()
+        {
+             
+            mainToolStrip = new System.Windows.Forms.ToolStrip();
+            toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            btnAddImage = new System.Windows.Forms.ToolStripButton();
+            btnCopy = new System.Windows.Forms.ToolStripButton();
+            btnPaste = new System.Windows.Forms.ToolStripButton();
+            btnDelete = new System.Windows.Forms.ToolStripButton();
+            btnZoomIn = new System.Windows.Forms.ToolStripButton();
+            btnZoomOut = new System.Windows.Forms.ToolStripButton();
+            btnZoomOriginal = new System.Windows.Forms.ToolStripButton();
+            btnInverse = new System.Windows.Forms.ToolStripButton();
+            btnMirrorVertical = new System.Windows.Forms.ToolStripButton();
+            btnMirrorHorizontal = new System.Windows.Forms.ToolStripButton();
+            btnMoveBack = new System.Windows.Forms.ToolStripButton();
+            btnMoveFront = new System.Windows.Forms.ToolStripButton();
+            mainToolStrip.SuspendLayout();
+            // 
+            // mainToolStrip
+            // 
+            mainToolStrip.BackColor = System.Drawing.SystemColors.ScrollBar;
+            mainToolStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
+            mainToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            btnAddImage,
+            btnCopy,
+            btnPaste,
+            btnDelete,
+            toolStripSeparator1,
+            btnZoomIn,
+            btnZoomOut,
+            btnZoomOriginal,
+            toolStripSeparator2,
+            btnInverse,
+            btnMirrorVertical,
+            btnMirrorHorizontal,
+            toolStripSeparator3,
+            btnMoveBack,
+            btnMoveFront});
+            mainToolStrip.Location = new System.Drawing.Point(0, 0);
+            mainToolStrip.Name = "mainToolStrip";
+            mainToolStrip.Size = new System.Drawing.Size(428, 25);
+            mainToolStrip.TabIndex = 0;
+            mainToolStrip.Text = "mainToolStrip";
+            // 
+            // toolStripSeparator1
+            // 
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripSeparator2
+            // 
+            toolStripSeparator2.Name = "toolStripSeparator2";
+            toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripSeparator3
+            // 
+            toolStripSeparator3.Name = "toolStripSeparator3";
+            toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            // 
+            // btnAddImage
+            // 
+            btnAddImage.CheckOnClick = true;
+            btnAddImage.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            btnAddImage.Image = global::FacadeCreatorApi.Properties.Resources.addImage;
+            btnAddImage.ImageTransparentColor = System.Drawing.Color.Magenta;
+            btnAddImage.Name = "btnAddImage";
+            btnAddImage.Size = new System.Drawing.Size(23, 22);
+            btnAddImage.Text = "Добавить изображение";
+            
+            btnAddImage.Click += mnuAddImage_Click;
+            // 
+            // btnCopy
+            // 
+            btnCopy.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            btnCopy.Image = global::FacadeCreatorApi.Properties.Resources.copy;
+            btnCopy.ImageTransparentColor = System.Drawing.Color.Magenta;
+            btnCopy.Name = "btnCopy";
+            btnCopy.Size = new System.Drawing.Size(23, 22);
+            btnCopy.Text = "Скопировать";
+            btnCopy.Enabled = false;
+            btnCopy.Click += mnuCopy_Click;
+            // 
+            // btnPaste
+            // 
+            btnPaste.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            btnPaste.Image = global::FacadeCreatorApi.Properties.Resources.paste;
+            btnPaste.ImageTransparentColor = System.Drawing.Color.Magenta;
+            btnPaste.Name = "btnPaste";
+            btnPaste.Size = new System.Drawing.Size(23, 22);
+            btnPaste.Text = "Вставить";
+            btnPaste.Enabled = false;
+            btnPaste.Click += mnuPaste_Click;
+            // 
+            // btnDelete
+            // 
+            btnDelete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            btnDelete.Image = global::FacadeCreatorApi.Properties.Resources.delete;
+            btnDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
+            btnDelete.Name = "btnDelete";
+            btnDelete.Size = new System.Drawing.Size(23, 22);
+            btnDelete.Text = "Удалить";
+            btnDelete.Enabled = false;
+            btnDelete.Click += mhuDeleteFigure_Click;
 
+            // 
+            // btnZoomIn
+            // 
+            btnZoomIn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            btnZoomIn.Image = global::FacadeCreatorApi.Properties.Resources.zoomIn;
+            btnZoomIn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            btnZoomIn.Name = "btnZoomIn";
+            btnZoomIn.Size = new System.Drawing.Size(23, 22);
+            btnZoomIn.Text = "Увеличить";
+            btnZoomIn.Click += btnZoomIn_Click;
+            // 
+            // btnZoomOut
+            // 
+            btnZoomOut.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            btnZoomOut.Image = global::FacadeCreatorApi.Properties.Resources.zoomOut;
+            btnZoomOut.ImageTransparentColor = System.Drawing.Color.Magenta;
+            btnZoomOut.Name = "btnZoomOut";
+            btnZoomOut.Size = new System.Drawing.Size(23, 22);
+            btnZoomOut.Text = "Уменьшить";
+            btnZoomOut.Click += BtnZoomOut_Click;
+            // 
+            // btnZoomOriginal
+            // 
+            btnZoomOriginal.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            btnZoomOriginal.Image = global::FacadeCreatorApi.Properties.Resources.zoomToOriginal;
+            btnZoomOriginal.ImageTransparentColor = System.Drawing.Color.Magenta;
+            btnZoomOriginal.Name = "btnZoomOriginal";
+            btnZoomOriginal.Size = new System.Drawing.Size(23, 22);
+            btnZoomOriginal.Text = "Исходный размер";
+            btnZoomOriginal.Click += BtnZoomOriginal_Click;
+            // 
+            // btnInverse
+            // 
+            btnInverse.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            btnInverse.Image = global::FacadeCreatorApi.Properties.Resources.invert;
+            btnInverse.ImageTransparentColor = System.Drawing.Color.Magenta;
+            btnInverse.Name = "btnInverse";
+            btnInverse.Size = new System.Drawing.Size(23, 22);
+            btnInverse.Text = "Инвертировать";
+            btnInverse.Enabled = false;
+            btnInverse.Click += mnuInversion_Click;
+            // 
+            // btnMirrorVertical
+            // 
+            btnMirrorVertical.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            btnMirrorVertical.Image = global::FacadeCreatorApi.Properties.Resources.mirrorVertical;
+            btnMirrorVertical.ImageTransparentColor = System.Drawing.Color.Magenta;
+            btnMirrorVertical.Name = "btnMirrorVertical";
+            btnMirrorVertical.Size = new System.Drawing.Size(23, 22);
+            btnMirrorVertical.Text = "Отзеркалить по вертикали";
+            btnMirrorVertical.Enabled = false;
+            btnMirrorVertical.Click += mnuMirrorVertical_Click;
+            // 
+            // btnMirrorHorizontal
+            // 
+            btnMirrorHorizontal.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            btnMirrorHorizontal.Image = global::FacadeCreatorApi.Properties.Resources.mirrorHorizontal;
+            btnMirrorHorizontal.ImageTransparentColor = System.Drawing.Color.Magenta;
+            btnMirrorHorizontal.Name = "btnMirrorHorizontal";
+            btnMirrorHorizontal.Size = new System.Drawing.Size(23, 22);
+            btnMirrorHorizontal.Text = "Отзеркалить по горизонтали";
+            btnMirrorHorizontal.Enabled = false;
+            btnMirrorHorizontal.Click += mnuMirrorHorizontal_Click;
+            // 
+            // btnMoveBack
+            // 
+            btnMoveBack.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            btnMoveBack.Image = global::FacadeCreatorApi.Properties.Resources.moveBack;
+            btnMoveBack.ImageTransparentColor = System.Drawing.Color.Magenta;
+            btnMoveBack.Name = "btnMoveBack";
+            btnMoveBack.Size = new System.Drawing.Size(23, 22);
+            btnMoveBack.Text = "На задний план";
+            btnMoveBack.Enabled = false;
+            btnMoveBack.Click += mnuToBack_Click;
+            // 
+            // btnMoveFront
+            // 
+            btnMoveFront.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            btnMoveFront.Image = global::FacadeCreatorApi.Properties.Resources.moveForward;
+            btnMoveFront.ImageTransparentColor = System.Drawing.Color.Magenta;
+            btnMoveFront.Name = "btnMoveFront";
+            btnMoveFront.Size = new System.Drawing.Size(23, 22);
+            btnMoveFront.Text = "На передний план";
+            btnMoveFront.Enabled = false;
+            btnMoveFront.Click += mnuToFrontClick;
+
+            canvas.Controls.Add(mainToolStrip);
+            mainToolStrip.ResumeLayout(false);
+            mainToolStrip.PerformLayout();
+            
+            //canvas.ResumeLayout(false);
+        }
+        
         #region createMethods
         private ContextMenuStrip createMenuCanvas()
         {
@@ -156,6 +372,29 @@ namespace FacadeCreatorApi
         #endregion
 
         #region Event Listener methods
+        private void BtnZoomOriginal_Click(object sender, EventArgs e)
+        {
+            scalingToAllFigureisVisibleMode();
+            UpdateGraphics();
+        }
+
+        private void BtnZoomOut_Click(object sender, EventArgs e)
+        {
+
+            mousePosition.X = (int)(canvas.Width / 2);
+            mousePosition.Y = (int)(canvas.Height / 2);
+            ZoomOut();
+            UpdateGraphics();
+        }
+
+        private void btnZoomIn_Click(object sender, EventArgs e)
+        {
+            mousePosition.X = (int)(canvas.Width / 2);
+            mousePosition.Y = (int)(canvas.Height / 2);
+            ZoomIn();
+            UpdateGraphics();
+        }
+
         private void mnuMirrorVertical_Click(object sender, EventArgs e)
         {
             if (selectedFigure != null && selectedFigure.figure is BkgImage)
@@ -620,6 +859,7 @@ namespace FacadeCreatorApi
             {
                 item.figure.draw(graphics, item.x, item.y);
             }
+            //graphics = canvas.CreateGraphics();
         }
         private void UpdateGraphics()
         {
@@ -630,7 +870,20 @@ namespace FacadeCreatorApi
         #region work with positions
         public void scalingToAllFigureisVisibleMode()
         {
-            scale = 0.5f;
+
+            Rectangle area = getBordersOfCanvas();
+            offsetX = area.X;
+            offsetY = area.Y + mainToolStrip.Height;
+            //MessageBox.Show(area.ToString());
+            float newXScale = (int)(((canvas.Width * 1.0f) / area.Width) / SCALE_STEP) * SCALE_STEP;
+            float newYScale=(int)(((canvas.Height*1.0f)/area.Height)/SCALE_STEP)*SCALE_STEP;
+            //MessageBox.Show(((canvas.Height * 1.0f) / area.Height).ToString());
+            scale = SCALE_STEP;
+            if (newXScale > SCALE_STEP) scale = newXScale;
+            if (SCALE_STEP < newYScale && newYScale < newXScale) scale = newYScale;
+            
+
+            //scale = 0.5f;
         }
         private Rectangle getBordersOfCanvas()
         {
@@ -695,8 +948,9 @@ namespace FacadeCreatorApi
                 // offsetX += (int)(mousePosition.X * scaleStep);
                 //offsetY += (int)(mousePosition.Y * scaleStep);
                 scale -= SCALE_STEP;
-                offsetX += (int)(((mousePosition.X * SCALE_STEP) )+0.5);
-                offsetY += (int)(((mousePosition.Y * SCALE_STEP) ) + 0.5);
+                if(scale<SCALE_STEP) scale = SCALE_STEP;
+                offsetX += (int)(((mousePosition.X * SCALE_STEP)) + 0.5);
+                offsetY += (int)(((mousePosition.Y * SCALE_STEP)) + 0.5);
                 // offsetX += (int)(((mousePosition.X + offsetX) * scaleStep) );
                 //offsetY += (int)(((mousePosition.Y + offsetY) * scaleStep) );
 
@@ -706,7 +960,18 @@ namespace FacadeCreatorApi
 
         private void unselectFigure()
         {
-            if (selectedFigure != null) selectedFigure.figure.unselectFigure();
+            if (selectedFigure != null)
+            {
+                selectedFigure.figure.unselectFigure();
+                btnCopy.Enabled = false;
+                btnDelete.Enabled = false;
+                btnInverse.Enabled = false;
+                btnMirrorHorizontal.Enabled = false;
+                btnMirrorVertical.Enabled = false;
+                btnMoveBack.Enabled = false;
+                btnMoveFront.Enabled = false;
+                
+            }
             selectedFigure = null;
 
         }
@@ -716,9 +981,18 @@ namespace FacadeCreatorApi
             if (selectedFigure != null)
             {
                 selectedFigure.figure.unselectFigure();
+                
+
             }
             selectedFigure = item;
             selectedFigure.figure.selectFigure();
+            btnCopy.Enabled = true;
+            btnDelete.Enabled = true;
+            btnInverse.Enabled = true;
+            btnMirrorHorizontal.Enabled = true;
+            btnMirrorVertical.Enabled = true;
+            btnMoveBack.Enabled = true;
+            btnMoveFront.Enabled = true;
         }
 
         private Point transformCoordinate(int x, int y)
@@ -731,7 +1005,11 @@ namespace FacadeCreatorApi
         #region work with collection of figures
         private void copySelectedFigure()
         {
-            if (selectedFigure != null) bufferedFigure = selectedFigure;
+            if (selectedFigure != null)
+            {
+                bufferedFigure = selectedFigure;
+                btnPaste.Enabled = true;
+            }
         }
         private void pasteBuferedFigure(int x, int y)
         {

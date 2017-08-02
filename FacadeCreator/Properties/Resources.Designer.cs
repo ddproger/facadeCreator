@@ -63,9 +63,9 @@ namespace FacadeCreator.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap _1 {
+        internal static System.Drawing.Bitmap _11 {
             get {
-                object obj = ResourceManager.GetObject("1", resourceCulture);
+                object obj = ResourceManager.GetObject("11", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace FacadeCreator.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap _23 {
+        internal static System.Drawing.Bitmap _231 {
             get {
-                object obj = ResourceManager.GetObject("23", resourceCulture);
+                object obj = ResourceManager.GetObject("231", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -83,9 +83,9 @@ namespace FacadeCreator.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap _24 {
+        internal static System.Drawing.Bitmap _241 {
             get {
-                object obj = ResourceManager.GetObject("24", resourceCulture);
+                object obj = ResourceManager.GetObject("241", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -93,9 +93,9 @@ namespace FacadeCreator.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap _27 {
+        internal static System.Drawing.Bitmap _271 {
             get {
-                object obj = ResourceManager.GetObject("27", resourceCulture);
+                object obj = ResourceManager.GetObject("271", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -103,9 +103,9 @@ namespace FacadeCreator.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap _37 {
+        internal static System.Drawing.Bitmap _371 {
             get {
-                object obj = ResourceManager.GetObject("37", resourceCulture);
+                object obj = ResourceManager.GetObject("371", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -113,9 +113,9 @@ namespace FacadeCreator.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap _38 {
+        internal static System.Drawing.Bitmap _381 {
             get {
-                object obj = ResourceManager.GetObject("38", resourceCulture);
+                object obj = ResourceManager.GetObject("381", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -123,9 +123,9 @@ namespace FacadeCreator.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap _39 {
+        internal static System.Drawing.Bitmap _391 {
             get {
-                object obj = ResourceManager.GetObject("39", resourceCulture);
+                object obj = ResourceManager.GetObject("391", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
