@@ -87,11 +87,11 @@ namespace FacadeCreatorApi.Services
             if (!File.Exists(path)) return null;
             using(Bitmap imageFromDisk = new Bitmap(path)){
                 try
-                {
-                    Bitmap imageInRam = new Bitmap(imageFromDisk.Width, imageFromDisk.Height);
-                    Graphics imageGraphics = Graphics.FromImage(imageInRam);
-                    imageGraphics.DrawImage(imageFromDisk, 0, 0);
-                    
+                {                    
+                    Bitmap imageInRam = new Bitmap(imageFromDisk);
+                    //MessageBox.Show(imageFromDisk.HorizontalResolution + "|" + imageFromDisk.VerticalResolution);
+                    //Graphics imageGraphics = Graphics.FromImage(imageInRam);
+                    //imageGraphics.DrawImage(imageFromDisk, 0, 0);
                     return imageInRam;
                 } catch (Exception){ }
                 

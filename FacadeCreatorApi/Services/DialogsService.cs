@@ -13,12 +13,13 @@ namespace FacadeCreatorApi.Services
     [ComVisible(false)]
     public class DialogsService
     {
-        public static Bitmap getImageFromDisk(string currentPath) {
+        private static RegeditService regService = new RegeditService();
+        public static Bitmap getImageFromDisk() {
             Bitmap image = null;
             Stream myStream = null;
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
 
-            openFileDialog1.InitialDirectory = currentPath;
+            openFileDialog1.InitialDirectory = regService.getOpenFilePath();
             openFileDialog1.Filter = "Jpeg files (*.jpg)|*.jpg|PNG files (*.png)|*.png|BMP files (*.bmp)|*.bmp|All files (*.*)|*.*";
             openFileDialog1.FilterIndex = 1;
             openFileDialog1.RestoreDirectory = true;
@@ -28,6 +29,7 @@ namespace FacadeCreatorApi.Services
                 try
                 {
                     image = ImageConversion.getImage(openFileDialog1.FileName);
+                    regService.setOpenFilePath(openFileDialog1.FileName);
                     //if ((myStream = openFileDialog1.OpenFile()) != null)
                     //{
                     //    using (myStream)

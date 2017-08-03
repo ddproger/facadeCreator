@@ -124,10 +124,9 @@ namespace FacadeCreatorApi
             {
                 MessageBox.Show("Объекты с атрибутом по свойству 1 не выбраны");
                 return false;
-            }
-            
-            scenes.scalingToAllFigureisVisibleMode();
+            }       
             frm.ShowDialog();
+            
             return true;
         }
     }

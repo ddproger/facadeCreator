@@ -19,6 +19,7 @@ namespace FacadeCreatorApi
         private const int SHIFT_STEP = 5;
         private const int ARRAY_SIZE_STEP = 10;
         private const float SCALE_STEP = 0.05f;
+        RegeditService regService = new RegeditService();
         #region menuStrips
         System.Windows.Forms.ToolStrip mainToolStrip;
         System.Windows.Forms.ToolStripButton btnAddImage;
@@ -59,7 +60,6 @@ namespace FacadeCreatorApi
         bool isMouseDown = false;
         bool canMovedFacadeMode = false;
 
-
         public Scenes(Control canvas, KdSdkApi kdApi)
         {
             this.canvas = canvas;
@@ -86,6 +86,7 @@ namespace FacadeCreatorApi
             canvas.KeyUp += new KeyEventHandler(keyUp);
             canvas.Paint += new PaintEventHandler(paint);
             canvas.DoubleClick += new EventHandler(canvas_double_click);
+            canvas.ClientSizeChanged += Canvas_ClientSizeChanged;
             addMenu();
             //FiguresCollection col = new FiguresCollectionImpl();
             //col.add(new FigureOnBoard(new Facade(1,10, 20), 12, 21));
@@ -95,6 +96,12 @@ namespace FacadeCreatorApi
             //{
             //    MessageBox.Show(item.y.ToString());
             //}
+        }
+
+        private void Canvas_ClientSizeChanged(object sender, EventArgs e)
+        {
+            scalingToAllFigureisVisibleMode();
+            UpdateGraphics();
         }
 
         private void addMenu()
@@ -277,7 +284,7 @@ namespace FacadeCreatorApi
             btnMoveBack.Size = new System.Drawing.Size(23, 22);
             btnMoveBack.Text = "На задний план";
             btnMoveBack.Enabled = false;
-            btnMoveBack.Click += mnuToBack_Click;
+            btnMoveBack.Click += mnuLower_Click;
             // 
             // btnMoveFront
             // 
@@ -288,7 +295,7 @@ namespace FacadeCreatorApi
             btnMoveFront.Size = new System.Drawing.Size(23, 22);
             btnMoveFront.Text = "На передний план";
             btnMoveFront.Enabled = false;
-            btnMoveFront.Click += mnuToFrontClick;
+            btnMoveFront.Click += mnuUp_Click;
 
             canvas.Controls.Add(mainToolStrip);
             mainToolStrip.ResumeLayout(false);
@@ -734,7 +741,7 @@ namespace FacadeCreatorApi
         }
         private void mnuAddImage_Click(object sender, EventArgs e)
         {
-            Bitmap newImage = DialogsService.getImageFromDisk("c:\\");
+            Bitmap newImage = DialogsService.getImageFromDisk();
             if (newImage != null)
             {
                 pastingImage = newImage;
@@ -870,10 +877,10 @@ namespace FacadeCreatorApi
         #region work with positions
         public void scalingToAllFigureisVisibleMode()
         {
-
             Rectangle area = getBordersOfCanvas();
             offsetX = area.X;
             offsetY = area.Y + mainToolStrip.Height;
+            //MessageBox.Show(canvas.Width + "|" + canvas.Height);
             //MessageBox.Show(area.ToString());
             float newXScale = (int)(((canvas.Width * 1.0f) / area.Width) / SCALE_STEP) * SCALE_STEP;
             float newYScale=(int)(((canvas.Height*1.0f)/area.Height)/SCALE_STEP)*SCALE_STEP;
@@ -881,8 +888,7 @@ namespace FacadeCreatorApi
             scale = SCALE_STEP;
             if (newXScale > SCALE_STEP) scale = newXScale;
             if (SCALE_STEP < newYScale && newYScale < newXScale) scale = newYScale;
-            
-
+            Figure.setDelta(scale);
             //scale = 0.5f;
         }
         private Rectangle getBordersOfCanvas()

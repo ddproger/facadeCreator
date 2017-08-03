@@ -74,6 +74,7 @@
     <Compile Include="Forms\PropertyForm.Designer.cs">
       <DependentUpon>PropertyForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="models\SavedState.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="models\ApplyingToKD.cs" />
     <Compile Include="models\BkgImage.cs" />
@@ -97,6 +98,8 @@
     <Compile Include="Services\KdSdkApiImpl.cs" />
     <Compile Include="Services\MenuItem.cs" />
     <Compile Include="Services\MenuItemImpl.cs" />
+    <Compile Include="Services\RegeditService.cs" />
+    <Compile Include="Services\StackStateOfObjectService.cs" />
     <Compile Include="Services\StringResources.cs" />
   </ItemGroup>
   <ItemGroup>
