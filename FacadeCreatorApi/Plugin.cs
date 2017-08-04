@@ -35,7 +35,8 @@ namespace FacadeCreatorApi
             KdSdkApiImpl kdApi = new KdSdkApiImpl(iCallParamsBlock);
             //kdApi.updatePalitra();
             AddMenu(iCallParamsBlock);
-            String path = StringResources.getResourcesPath();
+            String path = StringResources.getResourcesPath()+"\\"+StringResources.getImageDirectoryName();
+            //MessageBox.Show(path);
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);

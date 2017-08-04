@@ -17,8 +17,15 @@ namespace FacadeCreatorApi.Services
              ABSOLUTE_PATH = kdApi.AppliGetInfo(KD.SDK.AppliEnum.Info.EXE_DIR);
             CATALOGS_PATH = kdApi.AppliGetInfo(KD.SDK.AppliEnum.Info.CATALOGS_DIR);
             SCENES_PATH = kdApi.AppliGetInfo(KD.SDK.AppliEnum.Info.SCENES_DIR);
+            
             kdApi = null;
         }
+
+        internal static string getPathToSpaceIni()
+        {
+            return getAbsolutePath() + "\\space.ini";
+        }
+
         public static string getAbsolutePath()
         {
             return ABSOLUTE_PATH;
@@ -33,7 +40,10 @@ namespace FacadeCreatorApi.Services
         }
         public static string getResourcesPath()
         {
-            return getAbsolutePath()+"\\Textures";   
+            string result = IniFileReader.getValueFromFile("InSitu", "TexturesDir"); 
+            if (result == null || result.Equals("")) result = IniFileReader.getValueFromFile("Local", "TexturesDir");
+            
+            return result; //getAbsolutePath()+"\\Textures";   
         }
         public static string getImageDirectoryName()
         {

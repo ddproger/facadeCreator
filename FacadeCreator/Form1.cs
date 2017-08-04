@@ -23,8 +23,7 @@ namespace FacadeCreator
             scenes.addFigure(new Facade(1, 1, 600, 2200), 700, 0);
             scenes.addFigure(new BkgImage(ImageConversion.getImage("C:\\InSitu\\Textures\\images\\595E677B_0002_01162.jpg")), 0, 0);
             scenes.addFigure(new BkgImage(ImageConversion.getImage("C:\\InSitu\\Textures\\images\\595E677B_0002_01162.jpg")), 700, 0);
-            scenes.scalingToAllFigureisVisibleMode();
-            this.Refresh();
+            //MessageBox.Show(StringResources.getResourcesPath());
         }
         private void update(object sender, PaintEventArgs e)
         {
