@@ -13,6 +13,7 @@ namespace FacadeCreatorApi.models
     [ComVisible(false)]
     public class BkgImage : Figure
     {
+        private Stack<BkgImage> savedStates = new Stack<BkgImage>();
         private Bitmap img;
         public BkgImage(Bitmap img) : base(img.Width, img.Height)
         {
@@ -22,7 +23,7 @@ namespace FacadeCreatorApi.models
 
         public override Figure copy()
         {
-            BkgImage newBkgImage = new BkgImage(img);
+            BkgImage newBkgImage = new BkgImage(new Bitmap(img));
             newBkgImage.height = this.height;
             newBkgImage.width = this.width;
             newBkgImage.updateResolution();
@@ -100,6 +101,22 @@ namespace FacadeCreatorApi.models
         {
             img.Dispose();
             img = null;
+        }
+        public override void saveState()
+        {
+            savedStates.Push((BkgImage)this.copy());
+        }
+
+        public override void backToPrevious()
+        {
+            if (savedStates.Count == 0) return;
+            BkgImage returnedState = savedStates.Pop();
+            //this.selected = returnedState.selected;
+            this.height = returnedState.height;
+            this.width = returnedState.width;
+            this.img.Dispose();
+            this.img = returnedState.img;
+            this.updateResolution();
         }
     }
 }

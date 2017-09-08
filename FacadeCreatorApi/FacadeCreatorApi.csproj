@@ -74,6 +74,7 @@
     <Compile Include="Forms\PropertyForm.Designer.cs">
       <DependentUpon>PropertyForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="models\CanSaveState.cs" />
     <Compile Include="models\SavedState.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="models\ApplyingToKD.cs" />
@@ -150,6 +151,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\moveForward.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\backToPrevious.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

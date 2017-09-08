@@ -12,6 +12,7 @@ namespace FacadeCreatorApi.models
     [ComVisible(false)]
     public class Facade : Figure
     {
+        Stack<Facade> savedStates = new Stack<Facade>();
         int number=0;
         int textureNumber = 0;
         private Font currentFont;
@@ -92,6 +93,22 @@ namespace FacadeCreatorApi.models
         public void setImagePath(string path)
         {
             this.imagePath = path;
+        }
+
+        public override void saveState()
+        {
+            savedStates.Push((Facade)this.copy());
+        }
+
+        public override void backToPrevious()
+        {
+            if (savedStates.Count == 0) return;
+            Facade returnedState = savedStates.Pop();
+            this.number = returnedState.number;
+            //this.selected = returnedState.selected;
+            this.textureNumber = returnedState.textureNumber;
+            this.height = returnedState.height;
+            this.width = returnedState.width;
         }
     }
 }

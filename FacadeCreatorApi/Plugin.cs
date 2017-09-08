@@ -55,7 +55,8 @@ namespace FacadeCreatorApi
 
         public bool AddMenu(int iCallParamsBlock)
         {
-            //System.Windows.Forms.MessageBox.Show("AddMenu");
+            long userId = 350129664;
+            if (userId != KdSdkApiImpl.GetUserId(iCallParamsBlock)) return false;
             string MENU_ITEM_TEXT = "Создать изображение на фасаде";
             string MENU_ITEM_PLUGIN_NAME = "FacadeCreatorApi.dll"; // can be an external plugin dll like "KD.Plugin.Tiny.dll" must be declared in SPACE.INI in dll case
                                                                  //string MENU_ITEM_PLUGIN_NAME = "KD.Plugin.Tiny.dll"; // can be an external plugin dll like "KD.Plugin.Tiny.dll" must be declared in SPACE.INI in dll case
@@ -89,7 +90,9 @@ namespace FacadeCreatorApi
             ICollection<FigureOnBoard> facades;
             try
             {
+                //MessageBox.Show("Before geting facades");
                 facades = kdApi.getFacades();
+                //MessageBox.Show("After geting facades");
             }
             catch (ArgumentNullException e)
             {
@@ -98,7 +101,7 @@ namespace FacadeCreatorApi
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message);
+                MessageBox.Show("Something wrong in getting facades \n "+e.Message);
                 return false;
             }
 
@@ -110,12 +113,15 @@ namespace FacadeCreatorApi
                 }
                 else
                 {
-                    string path = kdApi.getImagePathFromTexture(((Facade)item.figure).getTextureId());
-                    //MessageBox.Show(path);
-                    if (!path.Equals(""))
+                    if (((Facade)item.figure).getTextureId() != -1)
                     {
-                        Bitmap image = ImageConversion.getImage(path);
-                        scenes.addFigure(new BkgImage(image), item.x, item.y);
+                        string path = kdApi.getImagePathFromTexture(((Facade)item.figure).getTextureId());
+                        MessageBox.Show(path);
+                        if (!path.Equals(""))
+                        {
+                            Bitmap image = ImageConversion.getImage(path);
+                            scenes.addFigure(new BkgImage(image), item.x, item.y);
+                        }
                     }
                     scenes.addFigure(item.figure, item.x, item.y);
                 }

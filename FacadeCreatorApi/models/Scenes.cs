@@ -20,6 +20,13 @@ namespace FacadeCreatorApi
         private const int ARRAY_SIZE_STEP = 10;
         private const float SCALE_STEP = 0.05f;
         RegeditService regService = new RegeditService();
+        Stack<CanSaveState> savedStateStack = new Stack<CanSaveState>();
+        private enum Actions
+        {
+            RESIZE,
+            MOVED,
+            EDIT_IMAGE
+        }
         #region menuStrips
         System.Windows.Forms.ToolStrip mainToolStrip;
         System.Windows.Forms.ToolStripButton btnAddImage;
@@ -35,8 +42,10 @@ namespace FacadeCreatorApi
         System.Windows.Forms.ToolStripButton btnMirrorVertical;
         System.Windows.Forms.ToolStripButton btnMirrorHorizontal;
         System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         System.Windows.Forms.ToolStripButton btnMoveBack;
         System.Windows.Forms.ToolStripButton btnMoveFront;
+        System.Windows.Forms.ToolStripButton btnReturnLastAction;
         #endregion
         KdSdkApi kdApi;
         Control canvas;
@@ -51,6 +60,7 @@ namespace FacadeCreatorApi
 
         private Point clickPoint = new Point();
         private Point mousePosition = new Point();
+        Rectangle savingStartPosition=new Rectangle();
         private Bitmap pastingImage;
         private Point absoluteClickPoint;
         int offsetX, offsetY;
@@ -111,6 +121,7 @@ namespace FacadeCreatorApi
             toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             btnAddImage = new System.Windows.Forms.ToolStripButton();
             btnCopy = new System.Windows.Forms.ToolStripButton();
             btnPaste = new System.Windows.Forms.ToolStripButton();
@@ -123,6 +134,7 @@ namespace FacadeCreatorApi
             btnMirrorHorizontal = new System.Windows.Forms.ToolStripButton();
             btnMoveBack = new System.Windows.Forms.ToolStripButton();
             btnMoveFront = new System.Windows.Forms.ToolStripButton();
+            btnReturnLastAction = new ToolStripButton();
             mainToolStrip.SuspendLayout();
             // 
             // mainToolStrip
@@ -144,7 +156,10 @@ namespace FacadeCreatorApi
             btnMirrorHorizontal,
             toolStripSeparator3,
             btnMoveBack,
-            btnMoveFront});
+            btnMoveFront,
+            toolStripSeparator4,
+            btnReturnLastAction
+            });
             mainToolStrip.Location = new System.Drawing.Point(0, 0);
             mainToolStrip.Name = "mainToolStrip";
             mainToolStrip.Size = new System.Drawing.Size(428, 25);
@@ -297,13 +312,31 @@ namespace FacadeCreatorApi
             btnMoveFront.Enabled = false;
             btnMoveFront.Click += mnuUp_Click;
 
+
+
+            btnReturnLastAction.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            btnReturnLastAction.Image = global::FacadeCreatorApi.Properties.Resources.backToPrevious;
+            btnReturnLastAction.ImageTransparentColor = System.Drawing.Color.Magenta;
+            btnReturnLastAction.Name = "btnReturnLastAction";
+            btnReturnLastAction.Size = new System.Drawing.Size(23, 22);
+            btnReturnLastAction.Text = "Вернуть";
+            btnReturnLastAction.Enabled = false;
+            btnReturnLastAction.Click += btnReturnLastAction_Click;
+
             canvas.Controls.Add(mainToolStrip);
             mainToolStrip.ResumeLayout(false);
             mainToolStrip.PerformLayout();
             
             //canvas.ResumeLayout(false);
         }
-        
+
+        private void btnReturnLastAction_Click(object sender, EventArgs e)
+        {
+            CanSaveState obj = savedStateStack.Pop();
+            obj.backToPrevious();
+            UpdateGraphics();
+            if (savedStateStack.Count == 0) btnReturnLastAction.Enabled=false;
+        }
         #region createMethods
         private ContextMenuStrip createMenuCanvas()
         {
@@ -406,6 +439,7 @@ namespace FacadeCreatorApi
         {
             if (selectedFigure != null && selectedFigure.figure is BkgImage)
             {
+                saveFigureState(selectedFigure.figure);
                 ((BkgImage)selectedFigure.figure).mirrorVertical();
                 UpdateGraphics();
             }
@@ -414,7 +448,9 @@ namespace FacadeCreatorApi
         {
             if (selectedFigure != null && selectedFigure.figure is BkgImage)
             {
+                saveFigureState(selectedFigure.figure);
                 ((BkgImage)selectedFigure.figure).mirrorHorizontal();
+               
                 UpdateGraphics();
             }
         }
@@ -422,6 +458,7 @@ namespace FacadeCreatorApi
         {
             if (selectedFigure != null && selectedFigure.figure is BkgImage)
             {
+                saveFigureState(selectedFigure.figure);
                 BkgImage image = (BkgImage)selectedFigure.figure;
                 image.inverse();
                 UpdateGraphics();
@@ -568,7 +605,25 @@ namespace FacadeCreatorApi
         {
             if (selectedFigure != null)
             {                   
-                    selectedFigure.figure.updateResolution();
+                selectedFigure.figure.updateResolution();
+                //Point mouse = transformCoordinate(e.X, e.Y);
+                if(savingStartPosition.X==selectedFigure.x&&savingStartPosition.Y==selectedFigure.y&&
+                    savingStartPosition.Width == selectedFigure.figure.width && savingStartPosition.Height == selectedFigure.figure.height)
+                {
+                    try
+                    {
+                        selectedFigure.backToPrevious();
+                        savedStateStack.Pop();
+                        if (savedStateStack.Count == 0) btnReturnLastAction.Enabled = false;
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+                else
+                {
+                    btnReturnLastAction.Enabled = true;
+                }
             }
             isMouseDown = false;
             UpdateGraphics();
@@ -648,6 +703,7 @@ namespace FacadeCreatorApi
                     canvas.ContextMenuStrip = mnuFacade;
             }
             if (e.Button != MouseButtons.Left) return;
+            
             clickPoint = transformCoordinate(e.X, e.Y);
             absoluteClickPoint = new Point(e.X, e.Y);
             if (pastingImage != null)
@@ -659,6 +715,7 @@ namespace FacadeCreatorApi
             isMouseDown = true;
             if (selectedFigure != null && selectedFigure.figure.isPointInFigure(clickPoint.X - selectedFigure.x, clickPoint.Y - selectedFigure.y))
             {
+                savePoint();
                 clickPoint.X -= selectedFigure.x;
                 clickPoint.Y -= selectedFigure.y;
                 return;
@@ -677,6 +734,7 @@ namespace FacadeCreatorApi
                         Cursor.Current = item.figure.getCursor(x, y, cntrEnabled);
                         clickPoint.X -= selectedFigure.x;
                         clickPoint.Y -= selectedFigure.y;
+                        savePoint();
                         return;
                     }
                 }
@@ -691,12 +749,22 @@ namespace FacadeCreatorApi
                     Cursor.Current = item.figure.getCursor(x, y, cntrEnabled);
                     clickPoint.X -= selectedFigure.x;
                     clickPoint.Y -= selectedFigure.y;
+                    savePoint();
                     return;
                 }
             }
-            canvas.ContextMenuStrip = mnuCanvas;
-            unselectFigure();
+                canvas.ContextMenuStrip = mnuCanvas;
+                unselectFigure();
+        }
+        public void savePoint()
+        {
+            savingStartPosition.X = selectedFigure.x;
+            savingStartPosition.Y = selectedFigure.y;
+            savingStartPosition.Width = selectedFigure.figure.width;
+            savingStartPosition.Height = selectedFigure.figure.height;
 
+            savedStateStack.Push(selectedFigure);
+            selectedFigure.saveState();
         }
         private void mnuFillFacades_Click(object sender, EventArgs e)
         {
@@ -878,8 +946,6 @@ namespace FacadeCreatorApi
         public void scalingToAllFigureisVisibleMode()
         {
             Rectangle area = getBordersOfCanvas();
-            offsetX = area.X;
-            offsetY = area.Y + mainToolStrip.Height;
             //MessageBox.Show(canvas.Width + "|" + canvas.Height);
             //MessageBox.Show(area.ToString());
             float newXScale = (int)(((canvas.Width * 1.0f) / area.Width) / SCALE_STEP) * SCALE_STEP;
@@ -889,6 +955,10 @@ namespace FacadeCreatorApi
             if (newXScale > SCALE_STEP) scale = newXScale;
             if (SCALE_STEP < newYScale && newYScale < newXScale) scale = newYScale;
             Figure.setDelta(scale);
+            
+            //Point startCoordinate = transformCoordinate(area.X, area.Y);
+            offsetX = (int)(-area.X*scale);
+            offsetY = (int)(-area.Y*scale) + mainToolStrip.Height;
             //scale = 0.5f;
         }
         private Rectangle getBordersOfCanvas()
@@ -963,7 +1033,6 @@ namespace FacadeCreatorApi
             }
         }
 
-
         private void unselectFigure()
         {
             if (selectedFigure != null)
@@ -986,10 +1055,9 @@ namespace FacadeCreatorApi
         {
             if (selectedFigure != null)
             {
-                selectedFigure.figure.unselectFigure();
-                
-
-            }
+                selectedFigure.figure.unselectFigure();   
+            }            
+            btnReturnLastAction.Enabled = true;
             selectedFigure = item;
             selectedFigure.figure.selectFigure();
             btnCopy.Enabled = true;
@@ -1045,6 +1113,11 @@ namespace FacadeCreatorApi
         private int getIndex(FigureOnBoard selectedFigure)
         {
             return bkgImages.getIndex(selectedFigure);
+        }
+        private void saveFigureState(CanSaveState figure)
+        {
+            figure.saveState();
+            savedStateStack.Push(figure);
         }
         #endregion    
         

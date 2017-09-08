@@ -97,6 +97,15 @@ namespace FacadeCreatorApi.Services
             return facades;
         }
 
+        internal static long GetUserId(int iCallParamsBlock)
+        {
+            long result=0;
+            Appli appli = new Appli();
+            string userId =  appli.GetAccountNumber();
+            long.TryParse(userId, out result);
+            return result;
+        }
+
         private int getSceneDimension()
         {
             int dimension = 0;
@@ -348,6 +357,8 @@ namespace FacadeCreatorApi.Services
         }
         public string getImagePathFromTexture(int id)
         {
+            //MessageBox.Show(id.ToString());
+            if (id == -1) return "";
             KD.SDK.Catalog catalog = _appli.Catalog;
 
             catalog.SessionId = _appli.StartSessionFromCallParams(iParamsBlock);
@@ -358,11 +369,14 @@ namespace FacadeCreatorApi.Services
                 //MessageBox.Show("isLoad=" + catalog.IsLoaded() + " " + catalog.GetInfo(CatalogEnum.InfoId.FILENAME));
 
                 int textureIndex = catalog.TableGetLineRankFromCode(CatalogEnum.TableId.TEXTURES, 0, 0, id.ToString(), false);
+                if (textureIndex == -1) return "";
                 //MessageBox.Show(catalog.TableGetLine(CatalogEnum.TableId.TEXTURES, 0, textureIndex));
                 string sandblandPath = catalog.TableGetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 10);
                 string photoPath = catalog.TableGetLineInfo(CatalogEnum.TableId.TEXTURES, 0, textureIndex, 3);
                 string pathToTextures = StringResources.getResourcesPath();
                 //MessageBox.Show(sandblandPath);
+                //MessageBox.Show(photoPath);
+
                 if (!sandblandPath.Equals(""))
                 {
                     return pathToTextures + "\\" + sandblandPath;

@@ -14,7 +14,7 @@ namespace FacadeCreatorApi.models
     public enum Action{
         SIZE_NS, SIZE_WE, SIZE_NWSE,SIZE_NWSE_WR,SHIFT, NO
     }
-    public abstract class Figure
+    public abstract class Figure:CanSaveState
     {
         protected static float delta = 1;
         public static void setDelta(float delta)
@@ -143,11 +143,19 @@ namespace FacadeCreatorApi.models
         {
             this.currentAction = action;
         }
+
+        public abstract void saveState();
+        public abstract void backToPrevious();
     }
     class FigureForm : Figure
     {
         public FigureForm(int width, int height) : base(width, height)
         {
+        }
+
+        public override void backToPrevious()
+        {
+            throw new NotImplementedException();
         }
 
         public override Figure copy()
@@ -169,7 +177,10 @@ namespace FacadeCreatorApi.models
             }
             else return Action.NO;
         }
-     
-        
+
+        public override void saveState()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
