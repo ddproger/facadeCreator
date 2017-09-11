@@ -331,9 +331,10 @@ namespace FacadeCreatorApi
         }
 
         private void btnReturnLastAction_Click(object sender, EventArgs e)
-        {
+        {            
             CanSaveState obj = savedStateStack.Pop();
             obj.backToPrevious();
+            if (!bkgImages.Contains(selectedFigure)) selectedFigure = null;
             UpdateGraphics();
             if (savedStateStack.Count == 0) btnReturnLastAction.Enabled=false;
         }
@@ -491,7 +492,9 @@ namespace FacadeCreatorApi
 
         private void mnuClearImages_Click(object sender, EventArgs e)
         {
-            bkgImages.removeAll();
+            deletedManyImageState deleteImagesState = new deletedManyImageState(bkgImages);
+            saveFigureState(deleteImagesState);
+            bkgImages.removeAll();            
             UpdateGraphics();
         }
         private void paint(object sender, PaintEventArgs e)
@@ -771,6 +774,8 @@ namespace FacadeCreatorApi
             Rectangle areaSize = new Rectangle();
             try
             {
+                filledBkgImages savedState = new filledBkgImages(bkgImages);
+                saveFigureState(savedState);
                 areaSize = getBordersOfCanvas();
                 Bitmap image = generateFullGrapics(areaSize);
                 bkgImages.removeAll();
@@ -1092,7 +1097,14 @@ namespace FacadeCreatorApi
         public void addFigure(Figure figure, int x, int y)
         {
             if (figure is BkgImage)
-                bkgImages.add(new FigureOnBoard(figure, x, y));
+            {
+                FigureOnBoard figureOnBoard = new FigureOnBoard(figure, x, y);
+                addedImageState addImageState = new addedImageState(bkgImages, figureOnBoard);
+                saveFigureState(addImageState);
+                bkgImages.add(figureOnBoard);
+                if (selectedFigure != null) unselectFigure();
+                selectFigure(figureOnBoard);
+            }
             else
                 facades.add(new FigureOnBoard(figure, x, y));
             UpdateGraphics();
@@ -1101,6 +1113,8 @@ namespace FacadeCreatorApi
         {
             if (selectedFigure.figure is BkgImage)
             {
+                DeletedImageState deletedImageState = new DeletedImageState(bkgImages, selectedFigure);
+                saveFigureState(deletedImageState);
                 bkgImages.remove(selectedFigure);
             }
             else
@@ -1118,9 +1132,9 @@ namespace FacadeCreatorApi
         {
             figure.saveState();
             savedStateStack.Push(figure);
+            btnReturnLastAction.Enabled = true;
         }
-        #endregion    
-        
+        #endregion         
         
     }
 }

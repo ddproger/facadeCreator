@@ -74,7 +74,11 @@
     <Compile Include="Forms\PropertyForm.Designer.cs">
       <DependentUpon>PropertyForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="models\addedImageState.cs" />
     <Compile Include="models\CanSaveState.cs" />
+    <Compile Include="models\DeletedImageState.cs" />
+    <Compile Include="models\deletedManyImageState.cs" />
+    <Compile Include="models\filledBkgImages.cs" />
     <Compile Include="models\SavedState.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="models\ApplyingToKD.cs" />
