@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,8 +22,8 @@ namespace FacadeCreator
             Scenes scenes = new Scenes(this, null);
             scenes.addFigure(new Facade(1, 1, 600, 2200), 0, 0);
             scenes.addFigure(new Facade(1, 1, 600, 2200), 700, 0);
-            scenes.addFigure(new BkgImage(ImageConversion.getImage("C:\\InSitu\\Textures\\images\\595E677B_0002_01162.jpg")), 0, 0);
-            scenes.addFigure(new BkgImage(ImageConversion.getImage("C:\\InSitu\\Textures\\images\\595E677B_0002_01162.jpg")), 700, 0);
+            //scenes.addFigure(new BkgImage(ImageConversion.getImage("C:\\InSitu\\Textures\\images\\595E677B_0002_01162.jpg")), 0, 0);
+            //scenes.addFigure(new BkgImage(ImageConversion.getImage("C:\\InSitu\\Textures\\images\\595E677B_0002_01162.jpg")), 700, 0);
             //MessageBox.Show(StringResources.getResourcesPath());
         }
         private void update(object sender, PaintEventArgs e)
@@ -41,7 +42,6 @@ namespace FacadeCreator
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)

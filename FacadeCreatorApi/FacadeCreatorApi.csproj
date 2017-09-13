@@ -43,6 +43,9 @@
     <StartupObject />
   </PropertyGroup>
   <PropertyGroup />
+  <PropertyGroup>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="kd.sdk">
       <HintPath>..\..\..\..\..\..\..\InSitu\kd.sdk.dll</HintPath>
@@ -158,6 +161,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\backToPrevious.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
