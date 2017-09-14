@@ -116,7 +116,7 @@ namespace FacadeCreatorApi
                     if (((Facade)item.figure).getTextureId() != -1)
                     {
                         string path = kdApi.getImagePathFromTexture(((Facade)item.figure).getTextureId());
-                        MessageBox.Show(path);
+                        //MessageBox.Show(path);
                         if (!path.Equals(""))
                         {
                             Bitmap image = ImageConversion.getImage(path);

@@ -331,12 +331,17 @@ namespace FacadeCreatorApi
         }
 
         private void btnReturnLastAction_Click(object sender, EventArgs e)
-        {            
+        {
+            ReturnLastAction();
+        }
+
+        private void ReturnLastAction()
+        {
             CanSaveState obj = savedStateStack.Pop();
             obj.backToPrevious();
             if (!bkgImages.Contains(selectedFigure)) selectedFigure = null;
             UpdateGraphics();
-            if (savedStateStack.Count == 0) btnReturnLastAction.Enabled=false;
+            if (savedStateStack.Count == 0) btnReturnLastAction.Enabled = false;
         }
         #region createMethods
         private ContextMenuStrip createMenuCanvas()
@@ -534,6 +539,7 @@ namespace FacadeCreatorApi
                 pasteBuferedFigure(bufferedFigure.x, bufferedFigure.y);
                 UpdateGraphics();
             }
+            else if (e.KeyCode == Keys.Z) ReturnLastAction();
             //if (selectedFigure != null && selectedFigure.figure.getAction() == models.Action.SIZE_NWSE)
             //{
             //     selectedFigure.figure.setAction(models.Action.SIZE_NWSE_WR);
