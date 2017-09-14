@@ -55,8 +55,42 @@ namespace FacadeCreatorApi
 
         public bool AddMenu(int iCallParamsBlock)
         {
-            long userId = 350129664;
-            if (userId != KdSdkApiImpl.GetUserId(iCallParamsBlock)) return false;
+            String str = "cp5";
+            String strUser = "0000000000";
+            
+            long userId = -1;
+            long.TryParse(strUser, out userId);
+            //MessageBox.Show(strUser);
+            if (userId!=0&&!str.Equals("cp6"))
+            {
+                char[] key = new char[] { '9', '4', '2', '0', '8', '1', '7', '5', '3', '6' };
+                long salt = 1001001;
+                userId = 0;
+                StringBuilder builder = new StringBuilder();
+                foreach (char item in strUser)
+                {
+                    builder.Append(key[Int32.Parse(item + "")]);
+                }
+                long.TryParse(builder.ToString(), out userId);
+                userId += salt;
+                long currentAccount = 0;
+                long.TryParse(_appli.GetAccountNumber(), out currentAccount);
+                if (userId != currentAccount) return false;
+            }
+            //System.Security.Cryptography.MD5 crypto = System.Security.Cryptography.MD5.Create();
+            //byte[] account = Encoding.UTF8.GetBytes(str);
+            //byte[] currentAccount = crypto.ComputeHash(Encoding.UTF8.GetBytes(_appli.GetAccountNumber()));
+            //for (int i = 0; i < currentAccount.Length; i++)
+            //{
+            //    MessageBox.Show(account[i] + "||" + currentAccount[i]);
+                
+            //}
+            //MessageBox.Show(str+"\n"+ Encoding.ASCII.GetString(crypto.ComputeHash(account)));
+           // MessageBox.Show();
+            //if (!str.Equals(Encoding.ASCII.GetString(crypto.ComputeHash(account)))) return false;
+            //if (!str.Equals("")) return false;
+
+            //if (userId != ) return false;
             string MENU_ITEM_TEXT = "Создать изображение на фасаде";
             string MENU_ITEM_PLUGIN_NAME = "FacadeCreatorApi.dll"; // can be an external plugin dll like "KD.Plugin.Tiny.dll" must be declared in SPACE.INI in dll case
                                                                  //string MENU_ITEM_PLUGIN_NAME = "KD.Plugin.Tiny.dll"; // can be an external plugin dll like "KD.Plugin.Tiny.dll" must be declared in SPACE.INI in dll case
